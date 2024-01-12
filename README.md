@@ -11,11 +11,11 @@ wget https://raw.githubusercontent.com/picardncc/sfdl-bash-loader/master/sfdl_ba
 #### Alternativ:
 Auspacken: 
 ```
-unzip sfdl-bash-loader-X.X.zip
+unzip sfdl-bash-loader-master.zip
 ```
 Ins Verzeichnis wechseln: 
 ```
-cd sfdl-bash-loader-X.X/sfdl_bash_loader  
+cd sfdl-bash-loader-master/sfdl_bash_loader  
 ```
 
 Rechte vergeben: 
