@@ -151,7 +151,7 @@ if [ $osxcheck == "Darwin" ]; then
 	osxpath="$(realpath "$0")"
 	pwd=$(dirname "${osxpath}")
 else
-	pwd="`dirname \"$0\"`"
+	pwd=$(cd `dirname $0` && pwd)
 fi
 
 if [ -f "$pwd/sys/setup.txt" ]; then
