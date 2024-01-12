@@ -119,8 +119,8 @@ if [ $(($version_local)) -lt $(($version_repo)) ]; then
 	
 	if [ -d "$pwd/sys" ]; then
 		echo "| Konfiguration speichern..."
-		rm -rf "/tmp/backup/" >/dev/null 2>&1
-		mkdir "/tmp/backup/"
+		rm -rf "/tmp/backup" >/dev/null 2>&1
+		mkdir "/tmp/backup"
 		cp -rf "$pwd/sys/userscript" "/tmp/backup/userscript"
 		cp -rf "$pwd/sys/loader.cfg" "/tmp/backup/loader.cfg"
 		cp -rf "$pwd/sys/passwords.txt" "/tmp/backup/passwords.txt"
