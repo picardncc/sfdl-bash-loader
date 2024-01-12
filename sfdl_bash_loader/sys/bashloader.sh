@@ -1,6 +1,6 @@
 #!/bin/bash
 # ==========================================================================================================
-# SFDL BASH-Loader - liebevoll gescripted von GrafSauger und raz3r
+# SFDL BASH-Loader - liebevoll gescripted von GrafSauger und raz3r. Fork von TREKi
 # ==========================================================================================================
 # 888888b.         d8888  .d8888b.  888    888        888                            888
 # 888  "88b       d88888 d88P  Y88b 888    888        888                            888
@@ -12,7 +12,7 @@
 # 8888888P" d88P     888  "Y8888P"  888    888        88888888 "Y88P"  "Y888888  "Y88888  "Y8888  888
 # ==========================================================================================================
 # sfdl bash loader version
-sfdl_version="3.16"
+sfdl_version="3.17"
 
 # pfad definieren
 IFSDEFAULT=$IFS
@@ -268,6 +268,9 @@ else
 		echo -e "==[SFDL BASH-Loader v$sfdl_version (GrafSauger,raz3r)]=="
 	fi
 fi
+
+# .SFDL nach .sfdl umbenennen
+for filexx in "$sfdl_files"/*.SFDL; do mv -i "${filexx}" "${filexx%%.SFDL}.sfdl" >/dev/null 2>&1; done
 
 # haben wir sfdl files?
 for sfdl in "$sfdl_files"/*.sfdl
@@ -869,12 +872,12 @@ do
 				echo -n "${#filearray[@]}|$maxdl" > $sfdl_logs/dl.txt
 				if [ $proxy == true ]; then
 						if [ $proxyauth == true ]; then
-							lftp -p $port -u "$username","$password" -e 'set ftp:use-feat no; set ssl:verify-certificate no; set ftp:proxy "'$proxytyp'"://"'$proxyuser'":"'$proxypass'"@"'$proxyip'":"'$proxyport'"; set ftp:ssl-allow no; mirror --continue --parallel="'$maxdl'" -vvv --log="'$sfdl_logs/$name'_lftp.log" "'$DLPATH'" "'$sfdl_downloads/$name'"; exit' $host > "$sfdl_logs/$name"_download.log | "$sfdl_sys/prog.sh" "$sfdl_downloads/$name" "$bsize" "$pwd" "${filearray[@]}"
+							lftp -p $port -u "$username","$password" -e 'set ftp:use-feat no; set ssl:verify-certificate no; set ftp:proxy "'$proxytyp'"://"'$proxyuser'":"'$proxypass'"@"'$proxyip'":"'$proxyport'"; set ftp:ssl-allow no; mirror --continue --parallel="'$maxdl'" "'$DLPATH'" "'$sfdl_downloads/$name'"; exit' $host > "$sfdl_logs/$name"_download.log | "$sfdl_sys/prog.sh" "$sfdl_downloads/$name" "$bsize" "$pwd" "${filearray[@]}"
 							else
-								lftp -p $port -u "$username","$password" -e 'set ftp:use-feat no; set ssl:verify-certificate no; set ftp:proxy "'$proxytyp'"://"'$proxyip'":"'$proxyport'"; set ftp:ssl-allow no; mirror --continue --parallel="'$maxdl'" -vvv --log="'$sfdl_logs/$name'_lftp.log" "'$DLPATH'" "'$sfdl_downloads/$name'"; exit' $host > "$sfdl_logs/$name"_download.log | "$sfdl_sys/prog.sh" "$sfdl_downloads/$name" "$bsize" "$pwd" "${filearray[@]}"
+								lftp -p $port -u "$username","$password" -e 'set ftp:use-feat no; set ssl:verify-certificate no; set ftp:proxy "'$proxytyp'"://"'$proxyip'":"'$proxyport'"; set ftp:ssl-allow no; mirror --continue --parallel="'$maxdl'" "'$DLPATH'" "'$sfdl_downloads/$name'"; exit' $host > "$sfdl_logs/$name"_download.log | "$sfdl_sys/prog.sh" "$sfdl_downloads/$name" "$bsize" "$pwd" "${filearray[@]}"
 							fi
 				else
-					lftp -p $port -u "$username","$password" -e 'set ftp:use-feat no; set ssl:verify-certificate no; set ftp:ssl-allow no; mirror --continue --parallel="'$maxdl'" -vvv --log="'$sfdl_logs/$name'_lftp.log" "'$DLPATH'" "'$sfdl_downloads/$name'"; exit' $host > "$sfdl_logs/$name"_download.log | "$sfdl_sys/prog.sh" "$sfdl_downloads/$name" "$bsize" "$pwd" "${filearray[@]}"
+					lftp -p $port -u "$username","$password" -e 'set ftp:use-feat no; set ssl:verify-certificate no; set ftp:ssl-allow no; mirror --continue --parallel="'$maxdl'" "'$DLPATH'" "'$sfdl_downloads/$name'"; exit' $host > "$sfdl_logs/$name"_download.log | "$sfdl_sys/prog.sh" "$sfdl_downloads/$name" "$bsize" "$pwd" "${filearray[@]}"
 				fi
 				else
 				printErr "Es wurde kein lftp gefunden! Bitte lftp installieren!"
@@ -1008,7 +1011,7 @@ do
 				echo  >> "$sfdl_downloads/$name/speedreport.txt"
 				echo Kommentar: Danke! >> "$sfdl_downloads/$name/speedreport.txt"
 				if [ $sfdl_eigenwerbung == true ]; then
-					echo -e "[SIZE=1]Powered by [url=https://github.com/raz3r-code/sfdl-bash-loader/releases]SFDL BASH-Loader[/url] $sfdl_version[/SIZE]" >> "$sfdl_downloads/$name/speedreport.txt"
+					echo -e "[SIZE=1]Powered by [url=https://github.com/picardncc/sfdl-bash-loader/releases]SFDL BASH-Loader[/url] $sfdl_version[/SIZE]" >> "$sfdl_downloads/$name/speedreport.txt"
 				fi
 			fi
 		else
