@@ -127,19 +127,22 @@ if [ $(($version_local)) -lt $(($version_repo)) ]; then
 	rm -rf "$pwd/sys/"
 	rm -rf "$pwd/start.sh"
 
+    echo
     echo "Script Pfad: "$pwd
     echo
 	echo "| Download wird gestartet."
 	echo "| Bitte warten ..."
 
-    wget $url_repodownload -O $pwd/main.tgz
-    tar -xvf $pwd/main.tgz
+    rm -rf $pwd >/dev/null 2>&1
     mkdir $pwd >/dev/null 2>&1
-    cp -r $pwd/picardncc*/sfdl_bash_loader/* $pwd
+    mkdir $pwd/tmp >/dev/null 2>&1
+    mkdir $pwd/tmp2 >/dev/null 2>&1
+    wget $url_repodownload -O $pwd/tmp/main.tgz
+    tar -xvf $pwd/tmp/main.tgz -C $pwd/tmp2
+    cp -r $pwd/tmp2/picardncc*/sfdl_bash_loader/* $pwd/
 
-    rm -rf $pwd/picardncc*
-    rm $pwd/main.tgz
-
+    rm -rf $pwd/tmp >/dev/null 2>&1
+    rm -rf $pwd/tmp2 >/dev/null 2>&1
 
 #	svn export "$url_repodownload"sys/ 1> /dev/null
 #	svn export "$url_repodownload"start.sh 1> /dev/null
