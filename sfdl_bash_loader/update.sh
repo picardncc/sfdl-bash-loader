@@ -151,7 +151,7 @@ if [ $(($version_local)) -lt $(($version_repo)) ]; then
 #		svn export "$url_repodownload"update.sh 1> /dev/null
 #	fi 
 	
-	chmod +x $pwd/start.sh
+	chmod +x "$pwd/start.sh"
 	
 	if [ -d "$pwd/backup" ]; then
 		echo "| Konfiguration wiederherstellen..."
