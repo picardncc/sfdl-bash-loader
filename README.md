@@ -1,6 +1,6 @@
 # SFDL Bash Loader
 
-Zum einfachen herunterladen mit SFDL Dateien unter Linux und Mac
+Zum einfachen herunterladen von SFDL Dateien unter Linux
 
 ## Installation
 
