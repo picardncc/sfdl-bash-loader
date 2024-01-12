@@ -20,7 +20,7 @@ cd sfdl-bash-loader-master/sfdl_bash_loader
 
 Rechte vergeben: 
 ```
-sudo chmod +x ./start.sh 
+sudo chmod +x start.sh 
 ```
 
 ## sfdl Datei ...
