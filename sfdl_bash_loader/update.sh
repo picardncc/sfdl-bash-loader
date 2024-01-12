@@ -40,7 +40,7 @@ if [ $osxcheck == "Darwin" ]; then
 	osxpath="$(realpath "$0")"
 	pwd=$(dirname "${osxpath}")
 else
-    	pwd=$(cd `dirname $0` && pwd)
+    pwd=$(cd `dirname $0` && pwd)
 fi
 
 # macht das bild sauber
