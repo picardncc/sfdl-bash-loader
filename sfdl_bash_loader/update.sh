@@ -15,8 +15,8 @@ upd_version=1.0
 version_repo=0
 version_local=0
 first_install=false
-url_repoversion="https://raw.githubusercontent.com/raz3r-code/sfdl-bash-loader/master/sfdl_bash_loader/sys/logs/version.txt"
-url_repodownload="https://github.com/raz3r-code/sfdl-bash-loader/trunk/sfdl_bash_loader/"
+url_repoversion="https://raw.githubusercontent.com/picardncc/sfdl-bash-loader/master/sfdl_bash_loader/sys/logs/version.txt"
+url_repodownload="https://github.com/picardncc/sfdl-bash-loader/trunk/sfdl_bash_loader/"
 
 
 status=`ps aux | grep [-i] 'bashloader.sh' 2> /dev/null | wc -l | tr -d '[[:space:]]'`
@@ -234,11 +234,3 @@ else
 	sleep 5
     loaderupdate
 fi
-
-
-
-
-
-
-
-
