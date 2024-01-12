@@ -16,7 +16,7 @@ version_repo=0
 version_local=0
 first_install=false
 url_repoversion="https://raw.githubusercontent.com/picardncc/sfdl-bash-loader/master/sfdl_bash_loader/sys/logs/version.txt"
-url_repodownload="https://github.com/picardncc/sfdl-bash-loader/master/sfdl_bash_loader/"
+url_repodownload="https://github.com/picardncc/sfdl-bash-loader/tarball/master"
 
 
 status=`ps aux | grep [-i] 'bashloader.sh' 2> /dev/null | wc -l | tr -d '[[:space:]]'`
@@ -47,7 +47,7 @@ fi
 
 clear
 echo "# ======================================================================================================="
-echo "# SFDL BASH-Loader - Installer/Updater - raz3r - Version $upd_version"
+echo "# SFDL BASH-Loader - Installer/Updater - raz3r - Version $upd_version" forked by TREKi
 echo "# ======================================================================================================="
 echo "| system: $osxcheck"
 
@@ -129,13 +129,22 @@ if [ $(($version_local)) -lt $(($version_repo)) ]; then
 	
 	echo "| Download wird gestartet."
 	echo "| Bitte warten ..."
+
+    wget $url_repodownload -O main.tgz
+    tar -xvf main.tgz
+    mkdir $pwd/sfdl_bash_loader >/dev/null 2>&1
+    cp -r $pwd/picardncc*/sfdl_bash_loader/* $pwd/sfdl_bash_loader
+
+    rm -rf $pwd/picardncc*
+    rm $pwd/main.tgz
+
+
+#	svn export "$url_repodownload"sys/ 1> /dev/null
+#	svn export "$url_repodownload"start.sh 1> /dev/null
 	
-	svn export "$url_repodownload"sys/ 1> /dev/null
-	svn export "$url_repodownload"start.sh 1> /dev/null
-	
-	if [ $first_install = true ]; then
-		svn export "$url_repodownload"update.sh 1> /dev/null
-	fi 
+#	if [ $first_install = true ]; then
+#		svn export "$url_repodownload"update.sh 1> /dev/null
+#	fi 
 	
 	chmod +x start.sh
 	
