@@ -34,7 +34,7 @@ Download starten:
 ./start.sh
 ```
 
-Zum einfachen Starten des Scripts, folgender Inhalt in /usr/local/bin/sfdl speichern und ausführbar machen.
+Zum einfacheren Starten des Scripts, folgender Inhalt in ``/usr/local/bin/sfdl`` speichern und ``ausführbar`` machen.
 Anschliessend kann lediglich ``sfdl`` in einem Terminal eingegeben werden um den Loader zu starten.
 ```
 #!/bin/bash
