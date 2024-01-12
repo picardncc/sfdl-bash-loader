@@ -43,7 +43,7 @@ if ! [ $sfdl_update = false ]; then
 		if [ $sfdl_update = ask ]; then
 			while true
 			do
-				read -t 60 -r -p "Update durchführen? Abbruch in 60 Sekunden automatisch [J/n] " input
+				read -t 60 -r -p "Update durchführen? Abbruch in 60 Sekunden automatisch [j/n] " input
 				case $input in
     				[yY][eE][sS]|[yY]|[Jj][Aa]|[Jj])
  					echo -e "\033[34mOk\033[0m"
