@@ -23,9 +23,9 @@ Rechte vergeben:
 sudo chmod +x ./start.sh 
 ```
 
-## sfdl Datei
+## sfdl Datei ...
 
-ins Unterverzeichnis sfdl speichern 
+... ins ``Unterverzeichnis sfdl`` speichern 
 
 
 ## Starten
