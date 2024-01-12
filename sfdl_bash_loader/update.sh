@@ -126,7 +126,8 @@ if [ $(($version_local)) -lt $(($version_repo)) ]; then
 	fi
 	rm -rf "$pwd/sys/"
 	rm -rf "$pwd/start.sh"
-	
+
+     echo "Script Pfad: "$pwd
 	echo "| Download wird gestartet."
 	echo "| Bitte warten ..."
 
