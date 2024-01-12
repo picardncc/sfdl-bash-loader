@@ -130,6 +130,9 @@ if [ $(($version_local)) -lt $(($version_repo)) ]; then
 	echo "| Download wird gestartet."
 	echo "| Bitte warten ..."
 
+echo "pwd: "$pwd
+exit
+
     wget $url_repodownload -O main.tgz
     tar -xvf main.tgz
     mkdir $pwd/sfdl_bash_loader >/dev/null 2>&1
