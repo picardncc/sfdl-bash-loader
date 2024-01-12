@@ -119,10 +119,11 @@ if [ $(($version_local)) -lt $(($version_repo)) ]; then
 	
 	if [ -d "$pwd/sys" ]; then
 		echo "| Konfiguration speichern..."
-		mkdir "$pwd/backup/"
-		cp -rf "$pwd/sys/userscript" "$pwd/backup/userscript"
-		cp -rf "$pwd/sys/loader.cfg" "$pwd/backup/loader.cfg.bak"
-		cp -rf "$pwd/sys/passwords.txt" "$pwd/backup/passwords.txt"
+		rm -rf "/tmp/backup/" >/dev/null 2>&1
+		mkdir "/tmp/backup/"
+		cp -rf "$pwd/sys/userscript" "/tmp/backup/userscript"
+		cp -rf "$pwd/sys/loader.cfg" "/tmp/backup/loader.cfg.bak"
+		cp -rf "$pwd/sys/passwords.txt" "/tmp/backup/passwords.txt"
 	fi
 	rm -rf "$pwd/sys/"
 	rm -rf "$pwd/start.sh"
@@ -153,15 +154,15 @@ if [ $(($version_local)) -lt $(($version_repo)) ]; then
 	
 	chmod +x "$pwd/start.sh"
 	
-	if [ -d "$pwd/backup" ]; then
+	if [ -d "/tmp/backup" ]; then
 		echo "| Konfiguration wiederherstellen..."
-		cp -rf "$pwd/backup/userscript" "$pwd/sys/"
-		mv "$pwd/sys/loader.cfg" "$pwd/backup/loader.cfg.new"
+		cp -rf "/tmp/backup/userscript" "$pwd/sys/"
+		mv "$pwd/sys/loader.cfg" "/tmp/backup/loader.cfg.new"
 		chmod +x "$pwd/sys/updatecfg.sh"
-		"$pwd/sys/updatecfg.sh" "$pwd/backup/loader.cfg.new" "$pwd/backup/loader.cfg.bak" "$pwd/sys/force.cfg" "$pwd/sys/loader.cfg"
+		"$pwd/sys/updatecfg.sh" "/tmp/backup/loader.cfg.new" "/tmp/backup/loader.cfg.bak" "$pwd/sys/force.cfg" "$pwd/sys/loader.cfg"
 		#cp -rf "$pwd/backup/loader.cfg" "$pwd/sys/loader.cfg"
-		cp -rf "$pwd/backup/passwords.txt" "$pwd/sys/passwords.txt"
-		rm -rf "$pwd/backup/"
+		cp -rf "/tmp/backup/passwords.txt" "$pwd/sys/passwords.txt"
+		rm -rf "/tmp/backup/"
 	fi
 	
 	if ! [ -d "$pwd/sfdl" ]; then
