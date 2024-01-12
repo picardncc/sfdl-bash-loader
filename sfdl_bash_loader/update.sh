@@ -127,12 +127,13 @@ if [ $(($version_local)) -lt $(($version_repo)) ]; then
 	rm -rf "$pwd/sys/"
 	rm -rf "$pwd/start.sh"
 
-     echo "Script Pfad: "$pwd
+    echo "Script Pfad: "$pwd
+    echo
 	echo "| Download wird gestartet."
 	echo "| Bitte warten ..."
 
-    wget $url_repodownload -O main.tgz
-    tar -xvf main.tgz
+    wget $url_repodownload -O $pwd/main.tgz
+    tar -xvf $pwd/main.tgz
     mkdir $pwd >/dev/null 2>&1
     cp -r $pwd/picardncc*/sfdl_bash_loader/* $pwd
 
