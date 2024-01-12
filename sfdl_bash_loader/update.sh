@@ -47,7 +47,7 @@ fi
 
 clear
 echo "# ======================================================================================================="
-echo "# SFDL BASH-Loader - Installer/Updater - raz3r - Version $upd_version" forked by TREKi
+echo "# SFDL BASH-Loader - Installer/Updater - raz3r - Version $upd_version forked by TREKi"
 echo "# ======================================================================================================="
 echo "| system: $osxcheck"
 
