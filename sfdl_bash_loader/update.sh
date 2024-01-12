@@ -159,7 +159,7 @@ if [ $(($version_local)) -lt $(($version_repo)) ]; then
 		cp -rf "/tmp/backup/userscript" "$pwd/sys/"
 		mv "$pwd/sys/loader.cfg" "$pwd/sys/loader.cfg.new"
 		chmod +x "$pwd/sys/updatecfg.sh"
-		"$pwd/sys/updatecfg.sh" "/tmp/backup/loader.cfg.new" "/tmp/backup/loader.cfg.bak" "$pwd/sys/force.cfg" "$pwd/sys/loader.cfg"
+		"$pwd/sys/updatecfg.sh" "$pwd/sys/force.cfg" "$pwd/sys/loader.cfg"
 		cp -rf "/tmp/backup/loader.cfg" "$pwd/sys/loader.cfg"
 		cp -rf "/tmp/backup/passwords.txt" "$pwd/sys/passwords.txt"
 		rm -rf "/tmp/backup/"
