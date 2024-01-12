@@ -13,7 +13,7 @@
 # ==========================================================================================================
 version_repo=0
 version_local=0
-url_repoversion="https://raw.githubusercontent.com/raz3r-code/sfdl-bash-loader/master/sfdl_bash_loader/sys/logs/version.txt"
+url_repoversion="https://raw.githubusercontent.com/picardncc/sfdl-bash-loader/master/sfdl_bash_loader/sys/logs/version.txt"
 
 
 #gibt es ein update
@@ -82,7 +82,7 @@ if ! [ $sfdl_update = false ]; then
 			fi 
 			
 			#hole neues Update script
-			wget https://raw.githubusercontent.com/raz3r-code/sfdl-bash-loader/master/sfdl_bash_loader/update.sh -v -O update.sh 1> /dev/null
+			wget https://raw.githubusercontent.com/picardncc/sfdl-bash-loader/master/sfdl_bash_loader/update.sh -v -O update.sh 1> /dev/null
 			#neue update.sh da? sonst mit alte behalten!
 			if [ -f "$pwd/update.sh" ]; then
 				rm -rf "$pwd/update_old.sh"
@@ -143,6 +143,7 @@ fi
 # pfad definieren
 # osx: kann nun auch unter mac osx mit doppelklick vom desktop aus gestartet werden
 osxcheck=$(uname)
+
 if [ $osxcheck == "Darwin" ]; then
 	realpath() {
 		[[ $1 = /* ]] && echo "$1" || echo "$PWD/${1#./}"
