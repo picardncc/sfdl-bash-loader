@@ -140,7 +140,7 @@ if [ $(($version_local)) -lt $(($version_repo)) ]; then
     mkdir $pwd/tmp2 >/dev/null 2>&1
     wget $url_repodownload -O $pwd/tmp/main.tgz
     tar -xvf $pwd/tmp/main.tgz -C $pwd/tmp2
-    cp -r "$pwd/tmp2/picardncc*/sfdl_bash_loader/* $pwd/"
+    cp -r $pwd/tmp2/picardncc*/sfdl_bash_loader/* $pwd/
 
     rm -rf $pwd/tmp >/dev/null 2>&1
     rm -rf $pwd/tmp2 >/dev/null 2>&1
