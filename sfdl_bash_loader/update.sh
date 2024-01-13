@@ -45,7 +45,7 @@ fi
 
 # macht das bild sauber
 
-#clear
+clear
 echo "# ======================================================================================================="
 echo "# SFDL BASH-Loader - Installer/Updater - raz3r - Version $upd_version forked by TREKi"
 echo "# ======================================================================================================="
