@@ -98,94 +98,94 @@ chkTools()
 
 loaderupdate()
 {
-echo "| -------------------------------------- "
+    echo "| -------------------------------------- "
 
-#hole versionsnummern
-version_repo=$(wget -q -O - "$@" $url_repoversion | cut -d"." -f2)
+    #hole versionsnummern
+    version_repo=$(wget -q -O - "$@" $url_repoversion | cut -d"." -f2)
 
-if [ -f "$pwd/sys/logs/version.txt" ]; then
-	version_local=$(cat "$pwd/sys/logs/version.txt" | cut -d"." -f2)
-fi
+    if [ -f "$pwd/sys/logs/version.txt" ]; then
+	    version_local=$(cat "$pwd/sys/logs/version.txt" | cut -d"." -f2)
+    fi
 
-if [ $first_install = false ]; then
-	echo "| Installiert Version: 3.$version_local"
-fi
+    if [ $first_install = false ]; then
+	    echo "| Installiert Version: 3.$version_local"
+    fi
 
-echo "| Aktuelle Version:    3.$version_repo"
-echo "| -------------------------------------- "
-if [ $(($version_local)) -lt $(($version_repo)) ]; then
-	echo "| ! Neue Version wird installiert !"
-	echo "| -------------------------------------- "
-	
-	if [ -d "$pwd/sys" ]; then
-		echo "| Konfiguration speichern..."
-		rm -rf "/tmp/backup" >/dev/null 2>&1
-		mkdir "/tmp/backup"
-		cp -rf "$pwd/sys/userscript" "/tmp/backup/userscript"
-		cp -rf "$pwd/sys/loader.cfg" "/tmp/backup/loader.cfg"
-		cp -rf "$pwd/sys/passwords.txt" "/tmp/backup/passwords.txt"
-	fi
-	rm -rf "$pwd/sys/*"
-	rm "$pwd/start.sh"
+    echo "| Aktuelle Version:    3.$version_repo"
+    echo "| -------------------------------------- "
+    if [ $(($version_local)) -lt $(($version_repo)) ]; then
+	    echo "| ! Neue Version wird installiert !"
+	    echo "| -------------------------------------- "
+	    
+	    if [ -d "$pwd/sys" ]; then
+		    echo "| Konfiguration speichern..."
+		    rm -rf "/tmp/backup" >/dev/null 2>&1
+		    mkdir "/tmp/backup"
+		    cp -rf "$pwd/sys/userscript" "/tmp/backup/userscript"
+		    cp "$pwd/sys/loader.cfg" "/tmp/backup/loader.cfg"
+		    cp "$pwd/sys/passwords.txt" "/tmp/backup/passwords.txt"
+	    fi
+	    rm -rf "$pwd/sys/*"
+	    rm "$pwd/start.sh"
 
-    echo
-    echo "Script Pfad: "$pwd
-    echo
-	echo "| Download wird gestartet."
-	echo "| Bitte warten ..."
+        echo
+        echo "Script Pfad: "$pwd
+        echo
+	    echo "| Download wird gestartet."
+	    echo "| Bitte warten ..."
 
-#    rm -rf $pwd >/dev/null 2>&1
-#    mkdir $pwd >/dev/null 2>&1
-    mkdir $pwd/tmp >/dev/null 2>&1
-    mkdir $pwd/tmp2 >/dev/null 2>&1
-    wget $url_repodownload -O $pwd/tmp/main.tgz
-    tar -xvf $pwd/tmp/main.tgz -C $pwd/tmp2
-    cp -r $pwd/tmp2/picardncc*/sfdl_bash_loader $pwd
+    #    rm -rf $pwd >/dev/null 2>&1
+    #    mkdir $pwd >/dev/null 2>&1
+        mkdir $pwd/tmp >/dev/null 2>&1
+        mkdir $pwd/tmp2 >/dev/null 2>&1
+        wget $url_repodownload -O $pwd/tmp/main.tgz
+        tar -xvf $pwd/tmp/main.tgz -C $pwd/tmp2
+        cp -r "$pwd/tmp2/picardncc*/sfdl_bash_loader" $pwd
 
-    rm -rf $pwd/tmp >/dev/null 2>&1
-    rm -rf $pwd/tmp2 >/dev/null 2>&1
+        rm -rf $pwd/tmp >/dev/null 2>&1
+        rm -rf $pwd/tmp2 >/dev/null 2>&1
 
-#	svn export "$url_repodownload"sys/ 1> /dev/null
-#	svn export "$url_repodownload"start.sh 1> /dev/null
-	
-#	if [ $first_install = true ]; then
-#		svn export "$url_repodownload"update.sh 1> /dev/null
-#	fi 
-	
-	chmod +x "$pwd/start.sh"
-	
-	if [ -d "/tmp/backup" ]; then
-		echo "| Konfiguration wiederherstellen..."
-		cp -rf "/tmp/backup/userscript" "$pwd/sys/userscript"
-		mv "$pwd/sys/loader.cfg" "$pwd/sys/loader.cfg.new"
-  		cp "/tmp/backup/loader.cfg" "$pwd/sys/loader.cfg"
-		chmod +x "$pwd/sys/updatecfg.sh" "$pwd/sys/force.cfg" "$pwd/sys/loader.cfg"
-		cp "/tmp/backup/passwords.txt" "$pwd/sys/passwords.txt"
-		rm -rf /tmp/backup
-	fi
-	
-	if ! [ -d "$pwd/sfdl" ]; then
-		mkdir sfdl
-	fi
-	
-	if ! [ -d "$pwd/downloads" ]; then
-		mkdir downloads
-	fi
-	if [ $first_install = true ]; then
-		echo "| Installation abgeschlossen "
-	else
-		echo "| Update abgeschlossen "
-	fi
-	echo "| -------------------------------------- "
-else
-	echo "| -------------------------------------- "
-	echo "| Version ist aktuell!"	
-	echo "| -------------------------------------- "	
-fi
+    #	svn export "$url_repodownload"sys/ 1> /dev/null
+    #	svn export "$url_repodownload"start.sh 1> /dev/null
+	    
+    #	if [ $first_install = true ]; then
+    #		svn export "$url_repodownload"update.sh 1> /dev/null
+    #	fi 
+	    
+	    chmod +x "$pwd/start.sh"
+	    
+	    if [ -d "/tmp/backup" ]; then
+		    echo "| Konfiguration wiederherstellen..."
+		    cp -rf "/tmp/backup/userscript" "$pwd/sys/userscript"
+		    mv "$pwd/sys/loader.cfg" "$pwd/sys/loader.cfg.new"
+      		cp "/tmp/backup/loader.cfg" "$pwd/sys/loader.cfg"
+		    chmod +x "$pwd/sys/updatecfg.sh" "$pwd/sys/force.cfg" "$pwd/sys/loader.cfg"
+		    cp "/tmp/backup/passwords.txt" "$pwd/sys/passwords.txt"
+		    rm -rf /tmp/backup
+	    fi
+	    
+	    if ! [ -d "$pwd/sfdl" ]; then
+		    mkdir sfdl
+	    fi
+	    
+	    if ! [ -d "$pwd/downloads" ]; then
+		    mkdir downloads
+	    fi
+	    if [ $first_install = true ]; then
+		    echo "| Installation abgeschlossen "
+	    else
+		    echo "| Update abgeschlossen "
+	    fi
+	    echo "| -------------------------------------- "
+    else
+	    echo "| -------------------------------------- "
+	    echo "| Version ist aktuell!"	
+	    echo "| -------------------------------------- "	
+    fi
 
-echo "| Starte BASH-Loader in 5 Sekunden ..."
-sleep 5
-exec "$pwd/start.sh"
+    echo "| Starte BASH-Loader in 5 Sekunden ..."
+    sleep 5
+    exec "$pwd/start.sh"
 }
 
 chkTools
