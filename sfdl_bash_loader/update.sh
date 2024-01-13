@@ -144,7 +144,7 @@ loaderupdate()
         cp -rf $pwd/tmp2/picardncc*/sfdl_bash_loader/* "$pwd/"
         rm -rf $pwd/tmp >/dev/null 2>&1
         rm -rf $pwd/tmp2 >/dev/null 2>&1
-
+exit
     #	svn export "$url_repodownload"sys/ 1> /dev/null
     #	svn export "$url_repodownload"start.sh 1> /dev/null
 	    
