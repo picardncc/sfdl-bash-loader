@@ -142,8 +142,8 @@ loaderupdate()
         wget $url_repodownload -O $pwd/tmp/main.tgz
         tar -xvf $pwd/tmp/main.tgz -C $pwd/tmp2
         cp -rf $pwd/tmp2/picardncc*/sfdl_bash_loader/* "$pwd/"
-#        rm -rf $pwd/tmp >/dev/null 2>&1
-#        rm -rf $pwd/tmp2 >/dev/null 2>&1
+        rm -rf $pwd/tmp >/dev/null 2>&1
+        rm -rf $pwd/tmp2 >/dev/null 2>&1
 
     #	svn export "$url_repodownload"sys/ 1> /dev/null
     #	svn export "$url_repodownload"start.sh 1> /dev/null
