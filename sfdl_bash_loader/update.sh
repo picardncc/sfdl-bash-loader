@@ -134,7 +134,7 @@ if [ $(($version_local)) -lt $(($version_repo)) ]; then
 	echo "| Download wird gestartet."
 	echo "| Bitte warten ..."
 
-    rm -rf $pwd >/dev/null 2>&1
+#    rm -rf $pwd >/dev/null 2>&1
     mkdir $pwd >/dev/null 2>&1
     mkdir $pwd/tmp >/dev/null 2>&1
     mkdir $pwd/tmp2 >/dev/null 2>&1
