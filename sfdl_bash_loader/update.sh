@@ -125,7 +125,7 @@ if [ $(($version_local)) -lt $(($version_repo)) ]; then
 		cp -rf "$pwd/sys/loader.cfg" "/tmp/backup/loader.cfg"
 		cp -rf "$pwd/sys/passwords.txt" "/tmp/backup/passwords.txt"
 	fi
-	rm -rf "$pwd/sys/"
+	rm -rf "$pwd/sys/*"
 	rm -rf "$pwd/start.sh"
 
     echo
