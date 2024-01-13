@@ -43,3 +43,9 @@ Anschliessend kann lediglich ``sfdl`` in einem Terminal eingegeben werden um den
 
 ## Kompatibilität (getestet)
 -Linux  
+
+
+## Verbesserung gegenüber dem Original
+- Update stabiler
+- Weiterentwicklung
+- Logging sicherer
