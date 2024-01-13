@@ -126,7 +126,7 @@ if [ $(($version_local)) -lt $(($version_repo)) ]; then
 		cp -rf "$pwd/sys/passwords.txt" "/tmp/backup/passwords.txt"
 	fi
 	rm -rf "$pwd/sys/*"
-	rm -rf "$pwd/start.sh"
+	rm "$pwd/start.sh"
 
     echo
     echo "Script Pfad: "$pwd
