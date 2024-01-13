@@ -79,6 +79,7 @@ if ! [ $sfdl_update = false ]; then
 			#alte update.sh sichern
 			if [ -f "$pwd/update.sh" ]; then
 				mv "$pwd/update.sh" "$pwd/update_old.sh"
+                    		rm "$pwd/sys/logs/version.txt"
 			fi 
 			
 			#hole neues Update script
