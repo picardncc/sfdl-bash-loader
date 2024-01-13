@@ -158,10 +158,10 @@ if [ $(($version_local)) -lt $(($version_repo)) ]; then
 		echo "| Konfiguration wiederherstellen..."
 		cp -rf "/tmp/backup/userscript" "$pwd/sys/"
 		mv "$pwd/sys/loader.cfg" "$pwd/sys/loader.cfg.new"
+  		cp "/tmp/backup/loader.cfg" "$pwd/sys/loader.cfg"
 		chmod +x "$pwd/sys/updatecfg.sh" "$pwd/sys/force.cfg" "$pwd/sys/loader.cfg"
-		cp -rf "/tmp/backup/loader.cfg" "$pwd/sys/loader.cfg"
-		cp -rf "/tmp/backup/passwords.txt" "$pwd/sys/passwords.txt"
-		rm -rf "/tmp/backup/"
+		cp "/tmp/backup/passwords.txt" "$pwd/sys/passwords.txt"
+		rm -rf /tmp/backup
 	fi
 	
 	if ! [ -d "$pwd/sfdl" ]; then
