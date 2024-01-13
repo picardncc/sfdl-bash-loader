@@ -105,7 +105,7 @@ loaderupdate()
 
     if [ -f "$pwd/sys/logs/version.txt" ]; then
 	    version_local=$(cat "$pwd/sys/logs/version.txt" | cut -d"." -f2)
-	rm "$pwd/sys/logs/version.txt"
+	    rm $pwd/sys/logs/version.txt
     fi
 
     if [ $first_install = false ]; then
