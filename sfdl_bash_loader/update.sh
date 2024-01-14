@@ -154,7 +154,7 @@ loaderupdate()
 	    
 	    if [ -d "/tmp/backup" ]; then
 		    echo "| Konfiguration wiederherstellen..."
-		    cp /tmp/backup/userscript "$pwd/sys/userscript"
+		    cp /tmp/backup/userscript/* "$pwd/sys/userscript"
 		    mv "$pwd/sys/loader.cfg" "$pwd/sys/loader.cfg.new"
       		cp "/tmp/backup/loader.cfg" "$pwd/sys/loader.cfg"
 		    chmod +x "$pwd/sys/updatecfg.sh" "$pwd/sys/force.cfg" "$pwd/sys/loader.cfg"
