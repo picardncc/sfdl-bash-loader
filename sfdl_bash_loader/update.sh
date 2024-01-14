@@ -183,7 +183,7 @@ loaderupdate()
     fi
 
     echo -e "\n\033[41m $pwd/start.sh erneut ausführen!\033[0m\n"
-    sleep 10
+    sleep 5
 }
 
 chkTools
