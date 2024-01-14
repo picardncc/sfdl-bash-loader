@@ -122,7 +122,7 @@ loaderupdate()
 		    echo "| Konfiguration speichern..."
 		    rm -rf "/tmp/backup" >/dev/null 2>&1
 		    mkdir "/tmp/backup"
-		    cp "$pwd/sys/userscript/*" "/tmp/backup/userscript"
+		    cp -r "$pwd/sys/userscript/" /tmp/backup/userscript
 		    cp "$pwd/sys/loader.cfg" "/tmp/backup/loader.cfg"
 		    cp "$pwd/sys/passwords.txt" "/tmp/backup/passwords.txt"
 		    cp "$pwd/update.sh" "/tmp/backup/update.sh"
@@ -150,18 +150,11 @@ loaderupdate()
         rm -rf $pwd/tmp >/dev/null 2>&1
         rm -rf $pwd/tmp2 >/dev/null 2>&1
 
-    #	svn export "$url_repodownload"sys/ 1> /dev/null
-    #	svn export "$url_repodownload"start.sh 1> /dev/null
-	    
-    #	if [ $first_install = true ]; then
-    #		svn export "$url_repodownload"update.sh 1> /dev/null
-    #	fi 
-	    
 	    chmod +x "$pwd/start.sh"
 	    
 	    if [ -d "/tmp/backup" ]; then
 		    echo "| Konfiguration wiederherstellen..."
-		    cp "/tmp/backup/userscript" "$pwd/sys/userscript"
+		    cp /tmp/backup/userscript "$pwd/sys/userscript"
 		    mv "$pwd/sys/loader.cfg" "$pwd/sys/loader.cfg.new"
       		cp "/tmp/backup/loader.cfg" "$pwd/sys/loader.cfg"
 		    chmod +x "$pwd/sys/updatecfg.sh" "$pwd/sys/force.cfg" "$pwd/sys/loader.cfg"
