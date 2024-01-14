@@ -122,12 +122,13 @@ loaderupdate()
 		    echo "| Konfiguration speichern..."
 		    rm -rf "/tmp/backup" >/dev/null 2>&1
 		    mkdir "/tmp/backup"
-		    cp -rf "$pwd/sys/userscript" "/tmp/backup/userscript"
+		    cp "$pwd/sys/userscript/*" "/tmp/backup/userscript"
 		    cp "$pwd/sys/loader.cfg" "/tmp/backup/loader.cfg"
 		    cp "$pwd/sys/passwords.txt" "/tmp/backup/passwords.txt"
 		    cp "$pwd/update.sh" "/tmp/backup/update.sh"
 	    fi
 	    rm -rf "$pwd/sys/"
+        rm -rf "$pwd/sys/userscript"
 	    rm "$pwd/start.sh"
 
         echo
@@ -138,13 +139,14 @@ loaderupdate()
 
         mkdir $pwd/tmp >/dev/null 2>&1
         mkdir $pwd/tmp2 >/dev/null 2>&1
-        wget $url_repodownload -O $pwd/tmp/main.tgz
-        tar -xvf $pwd/tmp/main.tgz -C $pwd/tmp2
+        wget $url_repodownload -O /tmp/main.tgz
+        tar -xvf /tmp/main.tgz -C $pwd/tmp2
         quelle="$pwd/tmp2/picardncc*/sfdl_bash_loader/*"
         ziel="$pwd/"
         cp -rf $quelle $ziel
         cp "$pwd/update.sh" "/tmp/backup/new.update.sh"
         cp "/tmp/backup/update.sh" "$pwd/update.sh"
+        rm /tmp/main.tgz
         rm -rf $pwd/tmp >/dev/null 2>&1
         rm -rf $pwd/tmp2 >/dev/null 2>&1
 
