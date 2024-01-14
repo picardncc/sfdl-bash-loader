@@ -187,9 +187,8 @@ loaderupdate()
 	    echo "| -------------------------------------- "	
     fi
 
-    echo "| Starte BASH-Loader in 5 Sekunden ..."
-    sleep 5
-    exec "$pwd/start.sh"
+    echo -e "\n\033[41m $pwd/start.sh erneut ausführen!\033[0m\n"
+    sleep 10
 }
 
 chkTools
