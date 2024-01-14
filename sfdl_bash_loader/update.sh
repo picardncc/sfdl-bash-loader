@@ -143,6 +143,7 @@ loaderupdate()
         quelle="$pwd/tmp2/picardncc*/sfdl_bash_loader/*"
         ziel="$pwd/"
         cp -rf $quelle $ziel
+        cp "$pwd/update.sh" "/tmp/backup/new.update.sh"
         cp "/tmp/backup/update.sh" "$pwd/update.sh"
         rm -rf $pwd/tmp >/dev/null 2>&1
         rm -rf $pwd/tmp2 >/dev/null 2>&1
@@ -163,6 +164,7 @@ loaderupdate()
       		cp "/tmp/backup/loader.cfg" "$pwd/sys/loader.cfg"
 		    chmod +x "$pwd/sys/updatecfg.sh" "$pwd/sys/force.cfg" "$pwd/sys/loader.cfg"
 		    cp "/tmp/backup/passwords.txt" "$pwd/sys/passwords.txt"
+            cp "/tmp/backup/new.update.sh" "$pwd/update.sh"
 		    rm -rf /tmp/backup
 	    fi
 	    
