@@ -127,9 +127,7 @@ checkupdate()
 		    fi
 		    #go
 		    if [ $sfdl_update = true ]; then
-                echo -e "\n\033[41m $pwd/update.sh ausführen!\033[0m\n"
-                sleep 10
-                exit
+				exec "$pwd/update.sh"
 		    fi
 	    else
 		    echo "| Keine Updates verfügbar"
