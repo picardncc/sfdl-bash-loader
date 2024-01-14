@@ -127,7 +127,7 @@ loaderupdate()
 		    cp "$pwd/sys/passwords.txt" "/tmp/backup/passwords.txt"
 		    cp "$pwd/update.sh" "/tmp/backup/update.sh"
 	    fi
-	    rm -rf "$pwd/sys/*"
+	    rm -rf "$pwd/sys/"
 	    rm "$pwd/start.sh"
 
         echo
@@ -164,7 +164,7 @@ loaderupdate()
       		cp "/tmp/backup/loader.cfg" "$pwd/sys/loader.cfg"
 		    chmod +x "$pwd/sys/updatecfg.sh" "$pwd/sys/force.cfg" "$pwd/sys/loader.cfg"
 		    cp "/tmp/backup/passwords.txt" "$pwd/sys/passwords.txt"
-            cp "/tmp/backup/new.update.sh" "$pwd/update.sh"
+#            cp "/tmp/backup/new.update.sh" "$pwd/update.sh"
 		    rm -rf /tmp/backup
 	    fi
 	    
