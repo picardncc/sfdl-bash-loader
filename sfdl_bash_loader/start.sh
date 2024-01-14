@@ -43,7 +43,7 @@ checkupdate()
 		    if [ $sfdl_update = ask ]; then
 			    while true
 			    do
-				    read -t 60 -r -p "Update durchführen? Abbruch in 60 Sekunden automatisch [j/n] " input
+				    read -t 60 -r -p "Update durchführen? Abbruch in 60 Sekunden [j/n] " input
 				    case $input in
         				[yY][eE][sS]|[yY]|[Jj][Aa]|[Jj])
      					echo -e "\033[34mOk\033[0m"
@@ -60,7 +60,7 @@ checkupdate()
            					;;
      
         				'')
-     					echo "Kein Eingabe Gefunden.....Ich warte nicht ewig!"
+     					echo "Kein Eingabe Gefunden!"
      					sfdl_update=false
 					    sleep 5
 					    break
