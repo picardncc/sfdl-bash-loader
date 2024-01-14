@@ -18,120 +18,123 @@ url_repoversion="https://raw.githubusercontent.com/picardncc/sfdl-bash-loader/ma
 
 #gibt es ein update
 checkupdate()
-{
-#immer update wenn keine config da
-sfdl_update=true
+    {
+    #immer update wenn keine config da
+    sfdl_update=true
 
-# lade config für update frage
-if [ -f "$pwd/sys/loader.cfg" ]; then
-	source "$pwd/sys/loader.cfg"
-fi
+    # lade config für update frage
+    if [ -f "$pwd/sys/loader.cfg" ]; then
+	    source "$pwd/sys/loader.cfg"
+    fi
 
-version_repo=$(wget -q -O - "$@" $url_repoversion | cut -d"." -f2)
+    version_repo=$(wget -q -O - "$@" $url_repoversion | cut -d"." -f2)
 
-if [ -f "$pwd/sys/logs/version.txt" ]; then
-	version_local=$(cat "$pwd/sys/logs/version.txt" | cut -d"." -f2)
-else
-	sfdl_update=false
-fi
+    if [ -f "$pwd/sys/logs/version.txt" ]; then
+	    version_local=$(cat "$pwd/sys/logs/version.txt" | cut -d"." -f2)
+    else
+	    sfdl_update=false
+    fi
 
-if ! [ $sfdl_update = false ]; then 
-	if [ $(($version_local)) -lt $(($version_repo)) ]; then
-		echo "| Updates verfügbar"
-	
-		#frage nach update
-		if [ $sfdl_update = ask ]; then
-			while true
-			do
-				read -t 60 -r -p "Update durchführen? Abbruch in 60 Sekunden automatisch [j/n] " input
-				case $input in
-    				[yY][eE][sS]|[yY]|[Jj][Aa]|[Jj])
- 					echo -e "\033[34mOk\033[0m"
-					sfdl_update=true
-					sleep 2
-					break
- 					;;
- 
-    				[nN][oO]|[nN]|[Nn][Ee][Ii][Nn])
- 					echo -e "\033[31mAbbruch\033[0m"
-					sfdl_update=false
-					sleep 2
-					break
-       					;;
- 
-    				'')
- 					echo "Kein Eingabe Gefunden.....Ich warte nicht ewig!"
- 					sfdl_update=false
-					sleep 5
-					break
-					;;
+    if ! [ $sfdl_update = false ]; then 
+	    if [ $(($version_local)) -lt $(($version_repo)) ]; then
+		    echo "| Updates verfügbar"
+	    
+		    #frage nach update
+		    if [ $sfdl_update = ask ]; then
+			    while true
+			    do
+				    read -t 60 -r -p "Update durchführen? Abbruch in 60 Sekunden automatisch [j/n] " input
+				    case $input in
+        				[yY][eE][sS]|[yY]|[Jj][Aa]|[Jj])
+     					echo -e "\033[34mOk\033[0m"
+					    sfdl_update=true
+					    sleep 2
+					    break
+     					;;
+     
+        				[nN][oO]|[nN]|[Nn][Ee][Ii][Nn])
+     					echo -e "\033[31mAbbruch\033[0m"
+					    sfdl_update=false
+					    sleep 2
+					    break
+           					;;
+     
+        				'')
+     					echo "Kein Eingabe Gefunden.....Ich warte nicht ewig!"
+     					sfdl_update=false
+					    sleep 5
+					    break
+					    ;;
 
-   	 			*)
- 					echo -e "\033[31mFalsche Eingabe...'$input'\033[0m"
- 					;;
+       	 			*)
+     					echo -e "\033[31mFalsche Eingabe...'$input'\033[0m"
+     					;;
 
-				esac
-				done
-		fi 
-	
-		#update starten
-		if [ $sfdl_update = true ]; then
-			#alte update.sh sichern
-			if [ -f "$pwd/update.sh" ]; then
-				mv "$pwd/update.sh" "$pwd/update_old.sh"
-			fi 
-			
-			#hole neues Update script
-			wget https://raw.githubusercontent.com/picardncc/sfdl-bash-loader/master/sfdl_bash_loader/update.sh -v -O $pwd/update.sh 1> /dev/null
-			#neue update.sh da? sonst mit alte behalten!
-			if [ -f "$pwd/update.sh" ]; then
-				rm -rf "$pwd/update_old.sh"
-				chmod +x "$pwd/update.sh"
-			else
-				echo -e "\n\033[41mACHTUNG!!!\033[0m\n"
-				echo "Aktuelle Update Datei konnte nicht geladen werden. Bitte später noch mal versuchen, oder Manuell die Neue Version bei Github Laden."
-				echo "Update trotzdem durchführen? Es kann zu einem unvollständigem Update führen und wird nicht empfohlen."
-				while true
-				do
-				read -t 30 -r -p "Update Fortsetzen? Abbruch in 30 Sekunden automatisch [J/n] " input
- 
-				case $input in
-    				[yY][eE][sS]|[yY]|[Jj][Aa]|[Jj])
-	 			echo -e "\033[34mOk\033[0m"
-				mv "$pwd/update_old.sh" "$pwd/update.sh"
-				break
-				;;
- 
-    				[nN][oO]|[nN]|[Nn][Ee][Ii][Nn])
- 				echo -e "\033[31mAbbruch\033[0m"
-				sfdl_update=false
-				mv "$pwd/update_old.sh" "$pwd/update.sh"
-				break
-				;;
- 
-    				'')
- 				echo "Kein Eingabe Gefunden. Abbruch"
-				sfdl_update=false
-				mv "$pwd/update_old.sh" "$pwd/update.sh"
-				break
-				;;
+				    esac
+				    done
+		    fi 
+	    
+		    #update starten
+		    if [ $sfdl_update = true ]; then
+			    #alte update.sh sichern
+			    if [ -f "$pwd/update.sh" ]; then
+				    mv "$pwd/update.sh" "$pwd/update_old.sh"
+			    fi 
 
-    				*)
- 				echo -e "\033[31mFalsche Eingabe...'$input'\033[0m"
- 				;;
+                rm "$pwd/sys/logs/version.txt"			
+			    #hole neues Update script
+			    wget https://raw.githubusercontent.com/picardncc/sfdl-bash-loader/master/sfdl_bash_loader/update.sh -v -O $pwd/update.sh 1> /dev/null
+			    #neue update.sh da? sonst mit alte behalten!
+			    if [ -f "$pwd/update.sh" ]; then
+				    rm -rf "$pwd/update_old.sh"
+				    chmod +x "$pwd/update.sh"
+			    else
+				    echo -e "\n\033[41mACHTUNG!!!\033[0m\n"
+				    echo "Aktuelle Update Datei konnte nicht geladen werden. Bitte später noch mal versuchen, oder Manuell die Neue Version bei Github Laden."
+				    echo "Update trotzdem durchführen? Es kann zu einem unvollständigem Update führen und wird nicht empfohlen."
+				    while true
+				    do
+				    read -t 30 -r -p "Update Fortsetzen? Abbruch in 30 Sekunden automatisch [J/n] " input
+     
+				    case $input in
+        				[yY][eE][sS]|[yY]|[Jj][Aa]|[Jj])
+	     			echo -e "\033[34mOk\033[0m"
+				    mv "$pwd/update_old.sh" "$pwd/update.sh"
+				    break
+				    ;;
+     
+        				[nN][oO]|[nN]|[Nn][Ee][Ii][Nn])
+     				echo -e "\033[31mAbbruch\033[0m"
+				    sfdl_update=false
+				    mv "$pwd/update_old.sh" "$pwd/update.sh"
+				    break
+				    ;;
+     
+        				'')
+     				echo "Kein Eingabe Gefunden. Abbruch"
+				    sfdl_update=false
+				    mv "$pwd/update_old.sh" "$pwd/update.sh"
+				    break
+				    ;;
 
-				esac
-				done
-			fi			
-		fi
-		#go
-		if [ $sfdl_update = true ]; then
-				exec "$pwd/update.sh"
-		fi
-	else
-		echo "| Keine Updates verfügbar"
-	fi
-fi
+        				*)
+     				echo -e "\033[31mFalsche Eingabe...'$input'\033[0m"
+     				;;
+
+				    esac
+				    done
+			    fi			
+		    fi
+		    #go
+		    if [ $sfdl_update = true ]; then
+                echo -e "\n\033[41m $pwd/update.sh ausführen!\033[0m\n"
+                sleep 10
+                exit
+		    fi
+	    else
+		    echo "| Keine Updates verfügbar"
+	    fi
+    fi
 }
 
 status=`ps aux | grep [-i] 'bashloader.sh' 2> /dev/null | wc -l | tr -d '[[:space:]]'`
