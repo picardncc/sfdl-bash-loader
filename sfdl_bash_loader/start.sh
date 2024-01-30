@@ -140,7 +140,8 @@ chkTools()
 		if hash brew 2>/dev/null; then
 			brew=1
 		else
-			installTools+=($(echo "brew "))
+			#installTools+=($(echo "brew "))
+			/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 		fi
 	fi
 	
@@ -163,7 +164,15 @@ chkTools()
 	else
 		installTools+=($(echo "wget "))
 	fi
-	
+
+	# findutils
+	findutils=0
+	if hash findutils 2>/dev/null; then
+		findutils=1
+	else
+		installTools+=($(echo "findutils "))
+	fi
+
 	# lftp
 	lftp=0
 	if hash lftp 2>/dev/null; then
@@ -261,7 +270,7 @@ chkTools()
 	if hash unrar 2>/dev/null; then
 		unrar=1
 	else
-		installTools+=($(echo "unrar "))
+		installTools+=($(echo "carlocab/personal/unrar "))
 	fi
 
 	# jq
@@ -309,6 +318,7 @@ chkTools()
 			echo "| -- TOOLS ----------------------------- "
             echo "| python:  $python"
 			echo "| wget:    $wget"
+			echo "| findutils: $findutils"
 			echo "| md5sum:  $md5sum"
 			echo "| xxd:     $xxd"
 			echo "| openssl: $openssl"
