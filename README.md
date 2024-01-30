@@ -42,10 +42,12 @@ Anschliessend kann lediglich ``sfdl`` in einem Terminal eingegeben werden um den
 ```
 
 ## Kompatibilität (getestet)
--Linux  
+- Linux
+- macOS 10.14 Mojave
 
 
 ## Verbesserung gegenüber dem Original
 - Update stabiler
 - Weiterentwicklung
 - Logging sicherer
+- svn ersetzt, da nicht mehr verfügbar auf github
