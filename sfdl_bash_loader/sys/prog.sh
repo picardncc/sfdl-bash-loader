@@ -52,7 +52,11 @@ while [ : ]
 do
 	name_chmod="$1"; echo ${var// /\ }
 	chmod -R $sfdl_chmod "$name_chmod"
-	sizeB="$(find $1 -type f -printf '%s\n' | awk '{ total += $1 }; END { printf "%.0f",total }')"
+	if [ $sysnameX == "Darwin" ]; then
+	    sizeB="$(gfind $1 -type f -printf '%s\n' | awk '{ total += $1 }; END { printf "%.0f",total }')"
+    else
+	    sizeB="$(find $1 -type f -printf '%s\n' | awk '{ total += $1 }; END { printf "%.0f",total }')"
+    fi
 	if [ -z "$sizeB" ]
                 then
                 sizeB=0

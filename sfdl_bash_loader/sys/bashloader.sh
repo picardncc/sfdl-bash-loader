@@ -12,7 +12,7 @@
 # 8888888P" d88P     888  "Y8888P"  888    888        88888888 "Y88P"  "Y888888  "Y88888  "Y8888  888
 # ==========================================================================================================
 # sfdl bash loader version
-sfdl_version="3.20"
+sfdl_version="3.21"
 
 # pfad definieren
 IFSDEFAULT=$IFS
@@ -270,7 +270,9 @@ else
 fi
 
 # .SFDL nach .sfdl umbenennen
-for filexx in "$sfdl_files"/*.SFDL; do mv -i "${filexx}" "${filexx%%.SFDL}.sfdl" >/dev/null 2>&1; done
+if [ $sysname == "Linux" ]; then
+    for filexx in "$sfdl_files"/*.SFDL; do mv -i "${filexx}" "${filexx%%.SFDL}.sfdl" >/dev/null 2>&1; done
+fi
 
 # haben wir sfdl files?
 for sfdl in "$sfdl_files"/*.sfdl
