@@ -407,6 +407,12 @@ if [ "${#installTools[@]}" != 0 ]; then
 			echo "| File are not executable or found"
 			chmod -R +x "$pwd/sys"
    			chmod +x "$pwd/sys/bashloader.sh"
+   			chmod +x "$pwd/sys/jq"
+   			chmod +x "$pwd/sys/netcat"
+   			chmod +x "$pwd/sys/prog.sh"
+   			chmod +x "$pwd/sys/status.sh"
+   			chmod +x "$pwd/sys/status.py"
+   			chmod +x "$pwd/sys/updatecfg.sh"
 			chmod +x "$pwd/update.sh"
 			echo "| Files are now executable"
 		fi
@@ -430,7 +436,13 @@ else
 		chmod +x -R "$pwd/sys"
 		chmod +x "$pwd/update.sh"
 		chmod +x "$pwd/sys/bashloader.sh"
+		chmod +x "$pwd/sys/jq"
+		chmod +x "$pwd/sys/netcat"
+		chmod +x "$pwd/sys/prog.sh"
+		chmod +x "$pwd/sys/status.sh"
+		chmod +x "$pwd/sys/status.py"
 		chmod +x "$pwd/sys/updatecfg.sh"
+		chmod +x "$pwd/update.sh"
 		echo "| Files are now executable"
 	fi
 	
