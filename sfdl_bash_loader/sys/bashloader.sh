@@ -273,6 +273,9 @@ fi
 if [ $sysname == "Linux" ]; then
     for filexx in "$sfdl_files"/*.SFDL; do mv -i "${filexx}" "${filexx%%.SFDL}.sfdl" >/dev/null 2>&1; done
 fi
+if [ $sysname == "Darwin" ]; then
+    for f in "$sfdl_files"/*.SFDL; do mv -- "$f" "${f%.SFDL}.sfdl"; done
+fi
 
 # haben wir sfdl files?
 for sfdl in "$sfdl_files"/*.sfdl
