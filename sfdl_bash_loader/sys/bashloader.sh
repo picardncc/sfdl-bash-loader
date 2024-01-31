@@ -274,7 +274,7 @@ if [ $sysname == "Linux" ]; then
     for filexx in "$sfdl_files"/*.SFDL; do mv -i "${filexx}" "${filexx%%.SFDL}.sfdl" >/dev/null 2>&1; done
 fi
 if [ $sysname == "Darwin" ]; then
-    for f in "$sfdl_files"/*.SFDL; do mv -- "$f" "${f%.SFDL}.sfdl"; done
+    for f in "$sfdl_files"/*.SFDL; do mv -- "$f" "${f%.SFDL}.sfdl" 2>/dev/null; done
 fi
 
 # haben wir sfdl files?
@@ -680,7 +680,7 @@ do
 								ladeerr=
                                                 		printLinie
 								mkdir -p "$sfdl_files"/error
-                                                		mv "$sfdl" "$sfdl_files"/error/$name.sfdl
+                                mv "$sfdl" "$sfdl_files"/error/$name.sfdl
 								continue
                                         		fi
 							if [ -f "$sfdl_logs/$ladepfad"_lftp_index.log ]; then
@@ -1355,7 +1355,7 @@ done
 
 # sind in der zwischenzeit neue sfdl files hinzugekommen?
 
-if [ `ls -a "$sfdl_files"/*.sfdl 2>/dev/null | wc -l` != 0 ] ; then
+if [ "$(ls -A $sfdl_files/*.sfdl)" != "" ] ; then
 	if [ $debug == true ]; then
         	printText "Folgendes ist im sfdl Ordner:" "$(ls -A $sfdl_files/*.sfdl)"
 	fi
