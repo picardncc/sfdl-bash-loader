@@ -42,40 +42,38 @@ checkupdate()
             sfdl_update=true	    
 
 		    #update starten
-		    if [ $sfdl_update = true ]; then
+		    if [ $sfdl_update == true ]; then
 			    #alte update.sh sichern
 			    if [ -f "$pwd/update.sh" ]; then
 				    mv "$pwd/update.sh" "$pwd/update_old.sh"
 			    fi 
-
                 rm "$pwd/sys/logs/version.txt"			
 			    #hole neues Update script
 			    wget https://raw.githubusercontent.com/picardncc/sfdl-bash-loader/master/sfdl_bash_loader/update.sh -v -O $pwd/update.sh 1> /dev/null
 			    #neue update.sh da? sonst mit alte behalten!
-			    if [ -f "$pwd/update.sh" ]; then
+			    if [ -s "$pwd/update.sh" ]; then
 				    rm -rf "$pwd/update_old.sh"
-				    chmod +x "$pwd/update.sh"
+                    echo "Update Fortsetzen? Abbrechen nicht empfohlen."
 			    else
 				    echo -e "\n\033[41mACHTUNG!!!\033[0m\n"
 				    echo "Aktuelle Update Datei konnte nicht geladen werden. Bitte später noch mal versuchen, oder Manuell die Neue Version bei Github Laden."
 				    echo "Update trotzdem durchführen? Das kann zu einer unvollständigen Installation führen und wird nicht empfohlen."
+                    mv "$pwd/update_old.sh" "$pwd/update.sh"
                 fi
+                chmod +x "$pwd/update.sh"
                 while true; do
-	                read  -t 15 -r -p "Update Fortsetzen? Abbrechen nicht empfohlen. In 15 Sekunden wird fortgefahren [J/n] " answer
+	                read  -t 15 -r -p "In 15 Sekunden wird fortgefahren [J/n] " answer
                     if echo "$answer" | grep -iq "^j" ;then
      					echo -e "\033[34mOk\033[0m"
-				        mv "$pwd/update_old.sh" "$pwd/update.sh"
 				        break
                     fi
                     if echo "$answer" | grep -iq "^n" ;then
      					echo -e "\033[31mAbbruch\033[0m"
 				        sfdl_update=false
-				        mv "$pwd/update_old.sh" "$pwd/update.sh"
 				        break
                     fi
                     if echo "$answer" == "" ;then
      					echo -e "\033[34mOk\033[0m"
-				        mv "$pwd/update_old.sh" "$pwd/update.sh"
 				        break
                     fi
                 done
@@ -174,9 +172,9 @@ chkTools()
 	    else
 		    installTools+=($(echo "findutils "))
 	    fi
-    	else
-	    findutils=1
-    	fi
+	else
+        findutils=1
+	fi
 
 	# lftp
 	lftp=0
