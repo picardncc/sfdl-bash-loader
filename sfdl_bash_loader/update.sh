@@ -198,7 +198,7 @@ if [ "${#installTools[@]}" != 0 ]; then
 		if hash brew 2>/dev/null; then
 			brew install ${installTools[@]} > /dev/null
 		else
-			/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" > /dev/null
+			/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" > /dev/null
 			brew install ${installTools[@]} > /dev/null
 		fi
 	else
