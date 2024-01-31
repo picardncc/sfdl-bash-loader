@@ -391,7 +391,7 @@ if [ "${#installTools[@]}" != 0 ]; then
 		echo "| BASH-Loader Installer konnte ${#installTools[@]} Tools"
 		echo "| nicht installieren: ${installTools[@]}"
 		if [ $osxcheck == "Darwin" ]; then
-			echo "| Installiere Homebrew: http://brew.sh"
+			echo "| Installiere Homebrew (siehe https://brew.sh )"
 			echo "| und installiere z.B. mit: brew install ${installTools[@]}"
 		else
 			echo "| Versuche Tools mit dem Paketmanager zu"
