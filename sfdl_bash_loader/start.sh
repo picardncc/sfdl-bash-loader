@@ -169,14 +169,14 @@ chkTools()
 	# findutils
 	if [ $osxcheck == "Darwin" ]; then
 	    findutils=0
-	    if hash findutils 2>/dev/null; then
+	    if hash gfind 2>/dev/null; then
 		    findutils=1
 	    else
 		    installTools+=($(echo "findutils "))
 	    fi
-    else
+    	else
 	    findutils=1
-    fi
+    	fi
 
 	# lftp
 	lftp=0
