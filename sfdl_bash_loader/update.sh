@@ -60,7 +60,9 @@ chkTools()
 		if hash brew 2>/dev/null; then
 			brew=1
 		else
-			installTools+=($(echo "brew "))
+			#installTools+=($(echo "brew "))
+			/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+			brew=1   
 		fi
 	fi
     
