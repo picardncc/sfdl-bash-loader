@@ -88,6 +88,20 @@ checkupdate()
     fi
 }
 
+function printErr {
+    echo $'\e[40;38;5;13m' $1 $'\e[0m'
+}
+
+if { ! hash md5sum 2>/dev/null; } then
+	printErr "Es fehlt md5sum!"
+	printErr "Abbruch!"
+	printErr "Installation bei Debian basierten OS (zBsp. Ubuntu): sudo apt-get install coreutils"
+	printErr "Installation bei RHEL basierten OS (zBsp. CentOS, Fedora): sudo yum install coreutils"
+	printErr "Installation bei Arch Linux und Derivaten: sudo pacman -S coreutils"
+	printErr "Direkt ab Source siehe: https://ioflood.com/blog/install-md5sum-command-linux/"
+	exit 1
+fi
+
 status=`ps aux | grep [-i] 'bashloader.sh' 2> /dev/null | wc -l | tr -d '[[:space:]]'`
 if [ "$status" -gt 0 ]; then
     echo "[`date`] : BASH-Loader wird bereits ausgefuehrt! [pid: $status]"
