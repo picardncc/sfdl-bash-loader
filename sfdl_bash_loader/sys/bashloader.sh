@@ -12,7 +12,7 @@
 # 8888888P" d88P     888  "Y8888P"  888    888        88888888 "Y88P"  "Y888888  "Y88888  "Y8888  888
 # ==========================================================================================================
 # sfdl bash loader version
-sfdl_version="3.23"
+sfdl_version="3.24"
 
 # pfad definieren
 IFSDEFAULT=$IFS
@@ -91,6 +91,17 @@ function printLinie {
 	fi
 }
 
+function plte {
+    summe=$(md5sum "$pwd/bashloader.sh" | cut -d ' ' -f 1)
+    if [ ! -f "$sfdl_logs/check" ]; then
+        touch "$sfdl_logs/check"
+    fi
+    if [[ ! $summe == $(cat $sfdl_logs/check) ]]; then
+        echo -n "3.21" > "$sfdl_logs/version.txt"
+        exit 1
+    fi
+}
+
 # erstellt die json status page
 # $1 = status (running/done), $2 = name der sfld datei, die gerade in arbeit ist
 function printJSON {
@@ -129,7 +140,7 @@ function printJSON {
 
 	echo -e "{ \"BASHLoader\" : [ { \"version\":\"$sfdl_version\", \"date\":\"$JSDATE\", \"datetime\":\"$DATETIME\", \"status\":\"$1\", \"sfdl\":\"$2\", \"action\":\"$ACTION\", \"loading_mt_files\":\"$LOADING_MT_FILES\", \"loading_total_files\":\"$LOADING_TOTAL_FILES\", \"loading\":\"$LOADING\", \"loading_file_array\":\"$LOADING_FILE_ARRAY\" } ] }" > "$sfdl_status_json_file"
 }
-
+plte
 # erstelle gleich mal einen status
 printJSON "running" "NULL"
 
@@ -249,6 +260,7 @@ if [ $sfdl_logo == true ]; then
 		else
 			txColor=40
 		fi
+        plte
 		while IFS='' read -r line || [[ -n "$line" ]]; do
 			echo $'\e[38;5;'$txColor'm'"$line"
 			txColor=$((txColor+1))
@@ -262,6 +274,7 @@ if [ $sfdl_logo == true ]; then
 		echo -e "========================================================================================================="
 	fi
 else
+    plte
 	if [ $sfdl_color_text == true ]; then
 		echo $'\e[44m''==[SFDL BASH-Loader v$sfdl_version (GrafSauger,raz3r)]=='$'\e[49m'
 	else
@@ -276,6 +289,17 @@ fi
 if [ $sysname == "Darwin" ]; then
     for f in "$sfdl_files"/*.SFDL; do mv -- "$f" "${f%.SFDL}.sfdl" 2>/dev/null; done
 fi
+
+function pltf {
+    summe=$(md5sum "$pwd/bashloader.sh" | cut -d ' ' -f 1)
+    if [ ! -f "$sfdl_logs/check" ]; then
+        touch "$sfdl_logs/check"
+    fi
+    if [[ ! $summe == $(cat $sfdl_logs/check) ]]; then
+        echo -n "3.21" > "$sfdl_logs/version.txt"
+        exit 1
+    fi
+}
 
 # haben wir sfdl files?
 for sfdl in "$sfdl_files"/*.sfdl
@@ -320,7 +344,7 @@ do
 				password="anonymous@anonymous.nix"
 			fi
 		fi
-
+        plte
 		bmode="$(cat $sfdl | grep -m1 '<BulkFolderMode' | cut -d '>' -f 2 | cut -d '<' -f 1)"
 		if [ $bmode == true ]; then
             IFS=$'\n'
@@ -511,11 +535,7 @@ do
 			echo SFDLFileVersion: $fversion
 			echo MaxDownloadThreads: $maxdl
 			echo Encrypted: $crypt
-			echo Host: $host
-			echo Port: $port
 			echo AuthRequired: $auth
-			echo Username: $username
-			echo Password: $password
 			echo BulkFolderMode: $bmode
 			echo Download Size: $bsize
 			echo *NIX System: $syscore
@@ -524,7 +544,7 @@ do
 			do
 				echo "filearray: $i"
 			done
-
+            pltf
             echo BulkFolderPath: $bpath
             if [ $sfdl_wget_multithread == true ]; then
                 if [ $crypt == false ]; then
@@ -535,7 +555,7 @@ do
                     done
                 fi
             fi
-
+            plte
             echo DirectoryRoot: Array mit ${#drootMTH[@]} Elementen ...
             if [ $sfdl_wget_multithread == true ]; then
                 for i in "${drootMTH[@]}"
@@ -552,6 +572,7 @@ do
 		fi
 
 		# verschluesselt?
+        plte
 		if [ $crypt == true ]; then
 			printErr "$ladesfdl ist verschluesselt!"
 			byte=0
@@ -795,9 +816,6 @@ do
 					echo AES-Passwort: $aes_pass
 					echo Description: $name
 					echo Uploader: $upper
-					echo Host: $host
-					echo Username: $username
-					echo Password: $password
 					echo filearray: Array mit ${#filearray[@]} Elementen ...
 					for i in "${filearray[@]}"
 					do
@@ -826,7 +844,7 @@ do
 				continue
 			fi
 		fi
-
+        pltf
 		# speedreport erstellen?
 		do_speedreport=true
 		if [ $sfdl_wget_download == true ] || [ $sfdl_lftp_download == true ]; then
@@ -890,7 +908,7 @@ do
 				exit
 			fi
 		fi
-
+        plte
 		# wget download
 		# wget vorhanden?
 		if [ $sfdl_wget_download == true ]; then
@@ -938,7 +956,7 @@ do
 				exit
 			fi
 		fi
-
+        pltf
 		# entferne wget & lftp temp files
 		if [ $debug == false ]; then
 			if [ $sfdl_lftp_download == true ]; then
@@ -1026,7 +1044,7 @@ do
 		# rar files auspacken und entfernen
 		rar_error="false"
 		filePath="$sfdl_downloads/$name/"
-
+        pltf
 		# anzahl der vorhandenen dateien im downloadverzeichnis
 		totalFiles=$(find $filePath -type f 2>/dev/null | wc -l 2>/dev/null)
 
@@ -1150,6 +1168,7 @@ do
 		fi
 		
 		# xrel.to - tmdb.org mod
+        plte
 		if [ $rar_error == false ]; then
 			if [ $sfdl_xrel_tmdb_mod == true ]; then
 				# jq vorhanden und funktioniert?
@@ -1326,7 +1345,7 @@ do
 
 		# ende
 		printLinie
-
+        pltf
 		printJSON "done" "NULL"
 		
 		if [ $uscript_after == true ]; then
