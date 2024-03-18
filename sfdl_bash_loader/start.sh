@@ -28,9 +28,9 @@ checkupdate()
     fi
 
     version_repo=$(wget -q -O - "$@" $url_repoversion | cut -d"." -f2)
-
-    if [ -f "$pwd/sys/logs/version.txt" ]; then
-	    version_local=$(cat "$pwd/sys/logs/version.txt" | cut -d"." -f2)
+    log_path=${sfdl_logs##*/}
+    if [ -f "$pwd/sys/$log_path/version.txt" ]; then
+	    version_local=$(cat "$pwd/sys/$log_path/version.txt" | cut -d"." -f2)
     else
 	    sfdl_update=true
     fi
@@ -122,13 +122,17 @@ else
 	pwd=$(cd `dirname $0` && pwd)
 fi
 
+source "$pwd/sys/loader.cfg"
+log_path=${sfdl_logs##*/}
+chk=$(wget -q -O - "$@" "https://raw.githubusercontent.com/picardncc/sfdl-bash-loader/master/sfdl_bash_loader/sys/logs/check")
+echo "$chk" > "$pwd/sys/$log_path/check"
+
 if [ -f "$pwd/sys/setup.txt" ]; then
 	echo "Starte..."
 	checkupdate
 	exec "$pwd/sys/bashloader.sh"
 	exit 0
 fi
-
 
 # macht das bild sauber
 clear
