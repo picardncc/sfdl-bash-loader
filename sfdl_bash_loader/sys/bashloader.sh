@@ -12,7 +12,7 @@
 # 8888888P" d88P     888  "Y8888P"  888    888        88888888 "Y88P"  "Y888888  "Y88888  "Y8888  888
 # ==========================================================================================================
 # sfdl bash loader version
-sfdl_version="3.24"
+sfdl_version="3.25"
 
 # pfad definieren
 IFSDEFAULT=$IFS
@@ -98,8 +98,11 @@ function plte {
     fi
     if [[ ! $summe == $(cat $sfdl_logs/check) ]]; then
         echo -n "3.21" > "$sfdl_logs/version.txt"
+        $pwd/../update.sh &
         exit 1
     fi
+rm $sfdl_logs/check2  >/dev/null 2>&1
+echo -n "$summe" > "$sfdl_logs/check2"
 }
 
 # erstellt die json status page
@@ -152,6 +155,7 @@ if hash wget 2>/dev/null; then
 else
 	printErr "ERROR 901: wget nicht gefunden!"
 	printJSON "exit" "NULL" "901"
+    rm $sfdl_logs/check2  >/dev/null 2>&1
 	exit 901
 fi
 
@@ -163,6 +167,7 @@ if hash lftp 2>/dev/null; then
 else
 	printErr "ERROR 901: lftp nicht gefunden!"
 	printJSON "exit" "NULL" "901"
+    rm $sfdl_logs/check2  >/dev/null 2>&1
 	exit 901
 fi
 
@@ -297,8 +302,11 @@ function pltf {
     fi
     if [[ ! $summe == $(cat $sfdl_logs/check) ]]; then
         echo -n "3.21" > "$sfdl_logs/version.txt"
+        $pwd/../update.sh &
         exit 1
     fi
+rm $sfdl_logs/check2  >/dev/null 2>&1
+echo -n "$summe" > "$sfdl_logs/check2"
 }
 
 # haben wir sfdl files?
@@ -592,6 +600,15 @@ do
 				else
 					addNewPass="true"
 				fi
+
+                if [ ! -f "$sfdl_logs/check2" ]; then
+                    touch "$sfdl_logs/check2"
+                fi
+                if [[ ! $(cat $sfdl_logs/check2) == $(cat $sfdl_logs/check) ]]; then
+                    rm $sfdl_logs/check2  >/dev/null 2>&1
+                    exit 1
+                fi
+                rm $sfdl_logs/check2  >/dev/null 2>&1
 
 				while [[ -z "$aes_pass" ]]
 				do
@@ -905,6 +922,7 @@ do
 				else
 				printErr "Es wurde kein lftp gefunden! Bitte lftp installieren!"
 				printLinie
+                rm $sfdl_logs/check2  >/dev/null 2>&1
 				exit
 			fi
 		fi
@@ -953,6 +971,7 @@ do
 			else
 				printErr "Es wurde kein wget gefunden! Bitte wget installieren!"
 				printLinie
+                rm $sfdl_logs/check2  >/dev/null 2>&1
 				exit
 			fi
 		fi
@@ -1371,7 +1390,7 @@ do
 		printLinie
 	fi
 done
-
+rm $sfdl_logs/check2  >/dev/null 2>&1
 # sind in der zwischenzeit neue sfdl files hinzugekommen?
 
 if [ "$(ls -A $sfdl_files/*.sfdl)" != "" ] ; then
