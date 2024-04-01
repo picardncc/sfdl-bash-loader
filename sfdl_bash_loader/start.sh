@@ -166,13 +166,16 @@ chkTools()
     python=0
 	if hash python 2>/dev/null; then
 		python=1
-	else
-        if [ $osxcheck == "Darwin" ]; then
-            installTools+=($(echo "python --framework --universal "))
-        else
-            installTools+=($(echo "python "))
-        fi
 	fi
+	if hash python3 2>/dev/null; then
+		python=1
+	fi
+    
+    if [[ $python == 0 ]]; then
+        echo "Python3 ist nicht installiert!"
+        echo "Bitte zuerst installieren!"
+        exit 1
+    fi
     
 	# wget
 	wget=0
@@ -219,7 +222,7 @@ chkTools()
 	if hash xxd 2>/dev/null; then
 		xxd=1
 	else
-		installTools+=($(echo "vim-common "))
+		installTools+=($(echo "xxd "))
 	fi
 
 	# openssl
@@ -291,7 +294,11 @@ chkTools()
 	if hash unrar 2>/dev/null; then
 		unrar=1
 	else
-		installTools+=($(echo "carlocab/personal/unrar "))
+		if [ $osxcheck == "Darwin" ]; then
+			installTools+=($(echo "carlocab/personal/unrar "))
+		else
+			installTools+=($(echo "unrar "))
+		fi
 	fi
 
 	# jq
@@ -390,12 +397,18 @@ if [ "${#installTools[@]}" != 0 ]; then
 					read -p "| Bitte SUDO Passwort eingeben: " -r -s sudopass
 				done
 			fi
-            echo "Allfällige Fragen mit y (ja) beantworten!"
 			if [ $usesudo == 1 ]; then
 				echo $sudopass | sudo -S apt-get --yes install ${installTools[@]} > /dev/null
+				if [[ $unrar == 0 ]]; then
+				    echo $sudopass | sudo -S apt-get --yes install software-properties-common
+				    echo $sudopass | sudo -S apt-add-repository contrib non-free
+				    echo $sudopass | sudo -S apt-get update
+				    echo $sudopass | sudo -S apt-get --yes install unrar
+                    echo "unrar ist installiert!"
+				fi    
 			else
 				echo "| Es wird installiert.... Bitte Warten"
-				apt-get --yes install ${installTools[@]} > /dev/null
+				apt-get --yes --force-yes install ${installTools[@]} > /dev/null
 			fi
 		else
 			echo "| Konnte Paketmanager APT nicht finden!"
@@ -412,7 +425,7 @@ if [ "${#installTools[@]}" != 0 ]; then
 			echo "| und installiere z.B. mit: brew install ${installTools[@]}"
 		else
 			echo "| Versuche Tools mit dem Paketmanager zu"
-			echo "| installieren. Beispiel: sudo apt-get --yes install ${installTools[@]}"
+			echo "| installieren. Beispiel (Debian/Ubuntu): sudo apt-get --yes install ${installTools[@]}"
 		fi
 	else
 		echo "| -------------------------------------- "
