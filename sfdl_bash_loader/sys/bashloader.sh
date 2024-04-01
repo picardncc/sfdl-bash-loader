@@ -1393,7 +1393,7 @@ done
 rm $sfdl_logs/check2  >/dev/null 2>&1
 # sind in der zwischenzeit neue sfdl files hinzugekommen?
 
-if [ $(ls $sfdl_files/*.sfdl | wc -l) -gt 0 ] ; then
+if [ $(ls $sfdl_files/*.sfdl 2>/dev/null | wc -l) -gt 0 ] ; then
 	if [ $debug == true ]; then
         	printText "Folgendes ist im sfdl Ordner:" "$(ls -A $sfdl_files/*.sfdl)"
 	fi
