@@ -12,7 +12,7 @@
 # 8888888P" d88P     888  "Y8888P"  888    888        88888888 "Y88P"  "Y888888  "Y88888  "Y8888  888
 # ==========================================================================================================
 # sfdl bash loader version
-sfdl_version="3.25"
+sfdl_version="3.26"
 
 # pfad definieren
 IFSDEFAULT=$IFS
@@ -1393,7 +1393,7 @@ done
 rm $sfdl_logs/check2  >/dev/null 2>&1
 # sind in der zwischenzeit neue sfdl files hinzugekommen?
 
-if [ "$(ls -A $sfdl_files/*.sfdl)" != "" ] ; then
+if [ $(ls $sfdl_files/*.sfdl | wc -l) -gt 0 ] ; then
 	if [ $debug == true ]; then
         	printText "Folgendes ist im sfdl Ordner:" "$(ls -A $sfdl_files/*.sfdl)"
 	fi
