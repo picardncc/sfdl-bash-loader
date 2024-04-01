@@ -212,10 +212,11 @@ if [ "${#installTools[@]}" != 0 ]; then
 					read -p "| Bitte SUDO Passwort eingeben: " sudopass
 				done
 			fi
+            echo "Allfällige Fragen mit y (ja) beantworten!"
 			if [ $usesudo == 1 ]; then
-				echo $sudopass | sudo -S apt-get --yes --force-yes install ${installTools[@]} > /dev/null
+				echo $sudopass | sudo -S apt-get --yes install ${installTools[@]} > /dev/null
 			else
-				apt-get --yes --force-yes install ${installTools[@]} > /dev/null
+				apt-get --yes install ${installTools[@]} > /dev/null
 			fi
 		else
 			echo "| Konnte Paketmanager APT nicht finden!"
