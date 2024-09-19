@@ -273,6 +273,23 @@ chkTools()
 		installTools+=($(echo "awk "))
 	fi
 
+	# ncftp
+	ncftp=0
+	if hash ncftp 2>/dev/null; then
+		ncftp=1
+	else
+		installTools+=($(echo "ncftp "))
+	fi
+
+	# parallel
+	parallel=0
+	if hash parallel 2>/dev/null; then
+		parallel=1
+	else
+		installTools+=($(echo "parallel "))
+	fi
+
+
 	# tail
 	tail=0
 	if hash tail 2>/dev/null; then
@@ -355,6 +372,8 @@ chkTools()
 			echo "| cut:     $cut"
 			echo "| sed:     $sed"
 			echo "| awk:     $awk"
+			echo "| ncftp:   $ncftp"
+			echo "| parallel: $parallel"
 			echo "| tail:    $tail"
 			echo "| bc:      $bc"
 			echo "| unrar:   $unrar"
