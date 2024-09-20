@@ -12,7 +12,7 @@
 # 8888888P" d88P     888  "Y8888P"  888    888        88888888 "Y88P"  "Y888888  "Y88888  "Y8888  888
 # ==========================================================================================================
 # sfdl bash loader version
-sfdl_version="3.27"
+sfdl_version="3.28"
 
 # pfad definieren
 IFSDEFAULT=$IFS
@@ -91,6 +91,39 @@ function printLinie {
     fi
 }
 
+# Funktion zum Download einer einzelnen Datei mit ncftp
+function download_file() {
+    local file=$1
+    printText "Downloading $file..."
+    ncftpget -u "$username" -p "$password" -P "$port" "$host" "$sfdl_downloads/$name" "$DLPATH/$file"
+}
+
+# Downloadprozess mit Begrenzung der gleichzeitigen Downloads
+function downloadprozess() {
+    if hash ncftp 2>/dev/null; then
+        zaehler=0
+        for file in "${filearray[@]}"; do
+            filename=$(echo "$file" | sed 's/.* \(.*\)|.*/\1/g')
+
+            download_file "$filename" &         # Starte den Download in einem Hintergrundprozess (&)
+
+            ((zaehler++))                       # Erhöhe den Zähler um 1
+
+            # Wenn die Anzahl der gleichzeitigen Downloads $maxdl erreicht, warte, bis ein Download fertig ist
+            if (( zaehler >= maxdl )); then
+                wait -n                         # Wartet, bis ein Hintergrundprozess abgeschlossen ist
+                ((zaehler--))                   # Reduziere den Zähler um 1
+            fi
+        done
+        wait                                    # Warten, bis alle verbleibenden Downloads abgeschlossen sind
+    else
+        printErr "Es wurde kein ncftp gefunden! Bitte ncftp installieren!"
+        printLinie
+        rm $sfdl_logs/check2  >/dev/null 2>&1
+        exit
+    fi
+}
+
 function plte {
     summe=$(md5sum "$pwd/bashloader.sh" | cut -d ' ' -f 1)
     if [ ! -f "$sfdl_logs/check" ]; then
@@ -166,6 +199,17 @@ if hash lftp 2>/dev/null; then
     fi
 else
     printErr "ERROR 901: lftp nicht gefunden!"
+    printJSON "exit" "NULL" "901"
+    rm $sfdl_logs/check2  >/dev/null 2>&1
+    exit 901
+fi
+
+if hash ncftp 2>/dev/null; then
+    if [ $debug == true ]; then
+        printText "Tooltest:" "ncftp gefunden!"
+    fi
+else
+    printErr "ERROR 901: ncftp nicht gefunden!"
     printJSON "exit" "NULL" "901"
     rm $sfdl_logs/check2  >/dev/null 2>&1
     exit 901
@@ -392,6 +436,7 @@ do
                         printErr "ERROR: Server $host antwortet weiterhin auf keine PINGS! FTP online?"
                     fi
                 fi
+
                 # index mit lftp laden (rekursiv)
                 if [ $bpathArrCnt == 1 ]; then
                     sfdl_wget_download=false
@@ -400,18 +445,49 @@ do
                     i=${bpath[0]}
                     i="$(echo $i | sed 's/&#32;/ /g')"
                     i="$(echo $i | sed 's@/*$@@g')" # danke tenti
-
+                    
                     ladepfad="${i##*/}"
                     printText "Lade Index (lftp):" "$ladepfad"
                     if [ $proxy == true ]; then
                         if [ $proxyauth == true ]; then
-                            lftp -p $port -u "$username","$password" -e "set ftp:use-feat no; set ssl:verify-certificate no; set ftp:proxy $proxytyp://$proxyuser:$proxypass@$proxyip:$proxyport; set net:timeout 30; set net:reconnect-interval-base 5; set net:max-retries 2; set ftp:ssl-allow no; open; open && find -l '$i' && exit" $host 2> $sfdl_logs/$ladepfad'_lftp_error.log' 1> $sfdl_logs/$ladepfad'_lftp_index.log'
+                            lftp -p $port -u "$username","$password" -e "set ssl:verify-certificate no; set ftp:proxy $proxytyp://$proxyuser:$proxypass@$proxyip:$proxyport; set net:timeout 30; set net:reconnect-interval-base 5; set net:max-retries 2; set ftp:ssl-allow no; open; open && find -l '$i' && exit" $host 2> $sfdl_logs/$ladepfad'_lftp_error.log' 1> $sfdl_logs/$ladepfad'_lftp_index.log'
+                            if [ $? -ne 0 ]; then
+                                printText "Versuche mit einer anderen Syntax!"
+                                rm "$sfdl_logs/$ladepfad"_lftp_error.log
+                                rm "$sfdl_logs/$ladepfad"_lftp_index.log
+                                pub_server=1
+                                lftp -p $port -u "$username","$password" -e "set ssl:verify-certificate no; set ftp:proxy $proxytyp://$proxyuser:$proxypass@$proxyip:$proxyport; set net:timeout 30; set net:reconnect-interval-base 5; set net:max-retries 2; set ftp:ssl-allow no; open; open && ls \"$i\" && exit" $host 2> $sfdl_logs/$ladepfad'_lftp_error.log' 1> $sfdl_logs/$ladepfad'_lftp_index.log'
+
                             else
-                        lftp -p $port -u "$username","$password" -e "set ftp:use-feat no; set ssl:verify-certificate no; set ftp:proxy $proxytyp://$proxyip:$proxyport; set net:timeout 30; set net:reconnect-interval-base 5; set net:max-retries 2; set ftp:ssl-allow no; open && find -l '$i' && exit" $host 2> $sfdl_logs/$ladepfad'_lftp_error.log' 1> $sfdl_logs/$ladepfad'_lftp_index.log'
+                                pub_server=0
                             fi
+                        else
+                            lftp -p $port -u "$username","$password" -e "set ssl:verify-certificate no; set ftp:proxy $proxytyp://$proxyip:$proxyport; set net:timeout 30; set net:reconnect-interval-base 5; set net:max-retries 2; set ftp:ssl-allow no; open && find -l '$i' && exit" $host 2> $sfdl_logs/$ladepfad'_lftp_error.log' 1> $sfdl_logs/$ladepfad'_lftp_index.log'
+
+                            if [ $? -ne 0 ]; then
+                                printText "Versuche mit einer anderen Syntax!"
+                                rm "$sfdl_logs/$ladepfad"_lftp_error.log
+                                rm "$sfdl_logs/$ladepfad"_lftp_index.log
+                                pub_server=1
+                                lftp -p $port -u "$username","$password" -e "set ssl:verify-certificate no; set ftp:proxy $proxytyp://$proxyip:$proxyport; set net:timeout 30; set net:reconnect-interval-base 5; set net:max-retries 2; set ftp:ssl-allow no; open && ls \"$i\" && exit" $host 2> $sfdl_logs/$ladepfad'_lftp_error.log' 1> $sfdl_logs/$ladepfad'_lftp_index.log'
+                            else
+                                pub_server=0
+                            fi
+                        fi
                     else
-                    lftp -p $port -u "$username","$password" -e "set ftp:use-feat no; set ssl:verify-certificate no; set net:timeout 30; set net:reconnect-interval-base 5; set net:max-retries 2; set ftp:ssl-allow no; open && find -l '$i' && exit" $host 2> $sfdl_logs/$ladepfad'_lftp_error.log' 1> $sfdl_logs/$ladepfad'_lftp_index.log'
+                        lftp -p $port -u "$username","$password" -e "set ssl:verify-certificate no; set net:timeout 30; set net:reconnect-interval-base 5; set net:max-retries 2; set ftp:ssl-allow no; open && find -l '$i' && exit" $host 2> $sfdl_logs/$ladepfad'_lftp_error.log' 1> $sfdl_logs/$ladepfad'_lftp_index.log'
+
+                        if [ $? -ne 0 ]; then
+                            printText "Versuche mit einer anderen Syntax!"
+                            rm "$sfdl_logs/$ladepfad"_lftp_error.log
+                            rm "$sfdl_logs/$ladepfad"_lftp_index.log
+                            pub_server=1
+                            lftp -p $port -u "$username","$password" -e "set ssl:verify-certificate no; set net:timeout 30; set net:reconnect-interval-base 5; set net:max-retries 2; set ftp:ssl-allow no; open && ls \"$i\" && exit" $host 2> $sfdl_logs/$ladepfad'_lftp_error.log' 1> $sfdl_logs/$ladepfad'_lftp_index.log'
+                        else
+                            pub_server=0
+                        fi
                     fi
+
                     if [ -s "$sfdl_logs/$ladepfad"_lftp_error.log ]; then
                         printErr "FEHLER: Es konnte kein Index der FTP-Daten erstellt werden!"
                                                 printErr "$ladesfdl wird uebersprungen!"
@@ -697,7 +773,7 @@ do
                             sfdl_lftp_download=true
                             
                             i=${bpath[0]}
-                                            i="$(echo $i | sed 's/&#32;/ /g')"
+                            i="$(echo $i | sed 's/&#32;/ /g')"
                             i="$(echo $i | sed 's@/*$@@g')" # danke tenti
                             
                             ladepfad="${i##*/}"
@@ -706,7 +782,7 @@ do
                                 if [ $proxyauth == true ]; then
                                     lftp -p $port -u "$username","$password" -e "set ftp:use-feat no; set ssl:verify-certificate no; set ftp:proxy $proxytyp://$proxyuser:$proxypass@$proxyip:$proxyport; set net:timeout 30; set net:reconnect-interval-base 5; set net:max-retries 2; set ftp:ssl-allow no; open; open && find -l '$i' && exit" $host 2> $sfdl_logs/$ladepfad'_lftp_error.log' 1> $sfdl_logs/$ladepfad'_lftp_index.log'
                                     if [ $? -ne 0 ]; then
-                                        echo "Versuche mit einer anderen Syntax!"
+                                        printText "Versuche mit einer anderen Syntax!"
                                         rm "$sfdl_logs/$ladepfad"_lftp_error.log
                                         rm "$sfdl_logs/$ladepfad"_lftp_index.log
                                         pub_server=1
@@ -717,7 +793,7 @@ do
                                 else
                                     lftp -p $port -u "$username","$password" -e "set ftp:use-feat no; set ssl:verify-certificate no; set ftp:proxy $proxytyp://$proxyip:$proxyport; set net:timeout 30; set net:reconnect-interval-base 5; set net:max-retries 2; set ftp:ssl-allow no; open && find -l '$i' && exit" $host 2> $sfdl_logs/$ladepfad'_lftp_error.log' 1> $sfdl_logs/$ladepfad'_lftp_index.log'
                                     if [ $? -ne 0 ]; then
-                                        echo "Versuche mit einer anderen Syntax!"
+                                        printText "Versuche mit einer anderen Syntax!"
                                         rm "$sfdl_logs/$ladepfad"_lftp_error.log
                                         rm "$sfdl_logs/$ladepfad"_lftp_index.log
                                         pub_server=1
@@ -729,7 +805,7 @@ do
                             else
                                 lftp -p $port -u "$username","$password" -e "set ftp:use-feat no; set ssl:verify-certificate no; set net:timeout 30; set net:reconnect-interval-base 5; set net:max-retries 2; set ftp:ssl-allow no; open && find -l '$i' && exit" $host 2> $sfdl_logs/$ladepfad'_lftp_error.log' 1> $sfdl_logs/$ladepfad'_lftp_index.log'
                                 if [ $? -ne 0 ]; then
-                                    echo "Versuche mit einer anderen Syntax!"
+                                    printText "Versuche mit einer anderen Syntax!"
                                     rm "$sfdl_logs/$ladepfad"_lftp_error.log
                                     rm "$sfdl_logs/$ladepfad"_lftp_index.log
                                     pub_server=1
@@ -737,19 +813,18 @@ do
                                 else
                                     pub_server=0
                                 fi
-
                             fi
                             if [ -s "$sfdl_logs/$ladepfad"_lftp_error.log ]; then
-                                                        printErr "FEHLER: Es konnte kein Index der FTP-Daten erstellt werden!"
-                                                        printErr "$ladesfdl wird uebersprungen!"
+                                printErr "FEHLER: Es konnte kein Index der FTP-Daten erstellt werden!"
+                                printErr "$ladesfdl wird uebersprungen!"
                                 ladeerr=$(cat "$sfdl_logs/$ladepfad"_lftp_error.log)
                                 printErr "$ladeerr"
                                 ladeerr=
-                                                        printLinie
+                                printLinie
                                 mkdir -p "$sfdl_files"/error
                                 mv "$sfdl" "$sfdl_files"/error/$name.sfdl
                                 continue
-                                                fi
+                            fi
                             if [ -f "$sfdl_logs/$ladepfad"_lftp_index.log ]; then
                                 IFS=$IFSDEFAULT
                                 while IFS='' read -r line || [[ -n "$line" ]]; do
@@ -776,9 +851,9 @@ do
                                         fi
                                     
                                         if [ $byte -ne 0 ]; then
-                                                                    file=${line##*/}
-                                                                    bsize=$((bsize+byte))
-                                                                    filearray+=("$(echo "$file|$byte")")
+                                            file=${line##*/}
+                                            bsize=$((bsize+byte))
+                                            filearray+=("$(echo "$file|$byte")")
                                         fi
                                     fi
                                 done < "$sfdl_logs/$ladepfad"_lftp_index.log
@@ -941,8 +1016,8 @@ do
                 echo -n "${#filearray[@]}|$maxdl" > $sfdl_logs/dl.txt
 
                 if [ $pub_server == 1 ]; then
-                    echo "Versuche ncftp zu verwenden. Das kann leider nicht mehrere Dateien gleichzeitig laden."
-                    echo "Lade folgende Dateien:"
+                    printText "Versuche ncftp zu verwenden."
+                    printText "Lade folgende Dateien:"
                     echo
                     echo "Grösse:              Dateiname:"
                     for i in "${filearray[@]}"
@@ -960,14 +1035,14 @@ do
                             lftp -p $port -u "$username","$password" -e 'set ftp:use-feat no; set ssl:verify-certificate no; set ftp:proxy "'$proxytyp'"://"'$proxyuser'":"'$proxypass'"@"'$proxyip'":"'$proxyport'"; set ftp:ssl-allow no; mirror --continue --parallel="'$maxdl'" "'$DLPATH'" "'$sfdl_downloads/$name'"; exit' $host > "$sfdl_logs/$name"_download.log | "$sfdl_sys/prog.sh" "$sfdl_downloads/$name" "$bsize" "$pwd" "${filearray[@]}"
                         else
                             export FTP_PROXY="$proxytyp://$proxyuser:$proxypass@$proxyip:$proxyport"
-                            ncftpget -u "$username" -p "$password" -P "$port" "$host" "$sfdl_downloads/$name" "$DLPATH/*"
+                            downloadprozess
                         fi
                     else
                         if [ $pub_server == 0 ]; then
                             lftp -p $port -u "$username","$password" -e 'set ftp:use-feat no; set ssl:verify-certificate no; set ftp:proxy "'$proxytyp'"://"'$proxyip'":"'$proxyport'"; set ftp:ssl-allow no; mirror --continue --parallel="'$maxdl'" "'$DLPATH'" "'$sfdl_downloads/$name'"; exit' $host > "$sfdl_logs/$name"_download.log | "$sfdl_sys/prog.sh" "$sfdl_downloads/$name" "$bsize" "$pwd" "${filearray[@]}"
                         else
                             export FTP_PROXY="$proxytyp://$proxyip:$proxyport"
-                            ncftpget -u "$username" -p "$password" -P "$port" "$host" "$sfdl_downloads/$name" "$DLPATH/*"
+                            downloadprozess
                         fi
                     fi
                 else
@@ -977,7 +1052,7 @@ do
 
                         lftp -p $port -u "$username","$password" -e "set ftp:use-feat no; set ssl:verify-certificate no; set ftp:ssl-allow no; mirror --continue --parallel=\"$maxdl\" \"$DLPATH\" \"$sfdl_downloads/$name\"; exit" $host > "$sfdl_logs/$name"_download.log | "$sfdl_sys/prog.sh" "$sfdl_downloads/$name" "$bsize" "$pwd" "${filearray[@]}"
                     else
-                        ncftpget -u "$username" -p "$password" -P "$port" "$host" "$sfdl_downloads/$name" "$DLPATH/*"
+                        downloadprozess
                     fi
                 fi
             else
