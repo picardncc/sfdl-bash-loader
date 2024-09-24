@@ -66,14 +66,6 @@ chkTools()
 		fi
 	fi
     
-	# svn
-	subv=0
-	if hash svn 2>/dev/null; then
-		subv=1
-	else
-		installTools+=($(echo "subversion "))
-	fi
-	
 	# wget
 	wget=0
 	if hash wget 2>/dev/null; then
@@ -85,7 +77,6 @@ chkTools()
 	if [ ! -z "$1" ]; then
 		if [ "$1" == "true" ]; then
 			echo "| -- TOOLS ----------------------------- "
-			echo "| subversion: $subv"
 			echo "| wget:    	$wget"
 			if [ $osxcheck == "Darwin" ]; then
 				echo "| brew:    	$brew"
@@ -214,9 +205,9 @@ if [ "${#installTools[@]}" != 0 ]; then
 			fi
             echo "Allfällige Fragen mit y (ja) beantworten!"
 			if [ $usesudo == 1 ]; then
-				echo $sudopass | sudo -S apt-get --yes install ${installTools[@]} > /dev/null
+				echo $sudopass | sudo -S apt-get --yes install ${installTools[@]} # > /dev/null
 			else
-				apt-get --yes install ${installTools[@]} > /dev/null
+				apt-get --yes install ${installTools[@]} # > /dev/null
 			fi
 		else
 			echo "| Konnte Paketmanager APT nicht finden!"
