@@ -94,20 +94,20 @@ loaderupdate()
     echo "| -------------------------------------- "
 
     #hole versionsnummern
-    version_repo=$(wget -q -O - "$@" $url_repoversion | cut -d"." -f2)
+    version_repo=$(wget -q -O - "$@" $url_repoversion)
 
     if [ -f "$pwd/sys/logs/version.txt" ]; then
-	    version_local=$(cat "$pwd/sys/logs/version.txt" | cut -d"." -f2)
+	    version_local=$(cat "$pwd/sys/logs/version.txt")
 	    rm $pwd/sys/logs/version.txt
     fi
 
     if [ $first_install = false ]; then
-	    echo "| Installiert Version: 3.$version_local"
+	    echo "| Installierte Version: $version_local"
     fi
 
-    echo "| Aktuelle Version:    3.$version_repo"
+    echo "| Aktuelle Version:      $version_repo"
     echo "| -------------------------------------- "
-    if [ $(($version_local)) -lt $(($version_repo)) ]; then
+    if [ "$(echo -e "$version_local\n$version_repo" | sort -V | head -n 1)" != "$version_repo" ]; then
 	    echo "| ! Neue Version wird installiert !"
 	    echo "| -------------------------------------- "
 	    
