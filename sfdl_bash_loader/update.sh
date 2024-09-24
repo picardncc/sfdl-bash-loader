@@ -102,10 +102,10 @@ loaderupdate()
     fi
 
     if [ $first_install = false ]; then
-	    echo "| Installierte Version: $version_local"
+	    echo "|" # Installierte Version: $version_local
     fi
 
-    echo "| Aktuelle Version:      $version_repo"
+    echo "| Aktuelle Version: $version_repo"
     echo "| -------------------------------------- "
     if [ "$(echo -e "$version_local\n$version_repo" | sort -V | head -n 1)" != "$version_repo" ]; then
 	    echo "| ! Neue Version wird installiert !"
