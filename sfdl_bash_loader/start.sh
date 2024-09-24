@@ -390,10 +390,10 @@ if [ "${#installTools[@]}" != 0 ]; then
 	
 	if [ $osxcheck == "Darwin" ]; then
 		if hash brew 2>/dev/null; then
-			brew install ${installTools[@]} > /dev/null
+			brew install ${installTools[@]}
 		else
 			/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" > /dev/null
-			brew install ${installTools[@]} > /dev/null
+			brew install ${installTools[@]}
 		fi
 	else
 		if hash apt-get 2>/dev/null; then
@@ -407,7 +407,7 @@ if [ "${#installTools[@]}" != 0 ]; then
 				done
 			fi
 			if [ $usesudo == 1 ]; then
-				echo $sudopass | sudo -S apt-get --yes install ${installTools[@]} > /dev/null
+				echo $sudopass | sudo -S apt-get --yes install ${installTools[@]}
 				if [[ $unrar == 0 ]]; then
 				    echo $sudopass | sudo -S apt-get --yes install software-properties-common
 				    echo $sudopass | sudo -S apt-add-repository contrib non-free
@@ -417,7 +417,7 @@ if [ "${#installTools[@]}" != 0 ]; then
 				fi    
 			else
 				echo "| Es wird installiert.... Bitte Warten"
-				apt-get --yes --force-yes install ${installTools[@]} > /dev/null
+				apt-get --yes --force-yes install ${installTools[@]}
 			fi
 		else
 			echo "| Konnte Paketmanager APT nicht finden!"
